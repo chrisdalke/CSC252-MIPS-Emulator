@@ -21,7 +21,6 @@ void write_initialization_vector(uint32_t sp, uint32_t gp, uint32_t start) {
 
     }
 
-
 int main(int argc, char * argv[]) {
   
     int MaxInst = 0;
@@ -36,7 +35,7 @@ int main(int argc, char * argv[]) {
     }
     sscanf (argv[2], "%d", &MaxInst);
 
-    //Open file pointers & initialize Heap & Regsiters
+    //Open file pointers & initialize Heap & Registers
     initHeap();
     initFDT();
     initRegFile(0);
@@ -56,10 +55,20 @@ int main(int argc, char * argv[]) {
         DynInstCount++;
         CurrentInstruction = readWord(PC,false);  
         printRegFile();
-    /********************************/
-    //Add your implementation here
-    /********************************/
-
+    
+        //////////////////////////////////////////////////////////
+        // Main Instruction Simulation
+        //////////////////////////////////////////////////////////
+        
+        
+        
+        //After we are done, increase the program counter by 4.
+        PC = PC + 4;
+        
+        //////////////////////////////////////////////////////////
+        // End of Main Instruction Simulation
+        //////////////////////////////////////////////////////////
+        
     } //end fori
     
     

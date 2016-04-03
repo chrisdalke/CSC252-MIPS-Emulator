@@ -57,7 +57,7 @@ fclose(stderrF);
 }
 
 
-inline int hexCharValue(const char ch){
+int hexCharValue(const char ch){
   if (ch>='0' && ch<='9')return ch-'0';
   if (ch>='a' && ch<='f')return ch-'a'+10;
   return 0;
