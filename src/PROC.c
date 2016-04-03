@@ -1,6 +1,7 @@
 
 #include <inttypes.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include "RegFile.h"
 #include "Syscall.h"
@@ -20,6 +21,23 @@ void write_initialization_vector(uint32_t sp, uint32_t gp, uint32_t start) {
         printRegFile();
 
     }
+
+
+//Function that converts a byte to binary
+//REMOVE BEFORE SUBMITTING
+const char *byte_to_binary(int x)
+{
+    static char b[9];
+    b[0] = '\0';
+    
+    int z;
+    for (z = 128; z > 0; z >>= 1)
+    {
+        strcat(b, ((x & z) == z) ? "1" : "0");
+    }
+    
+    return b;
+}
 
 int main(int argc, char * argv[]) {
   
@@ -54,16 +72,23 @@ int main(int argc, char * argv[]) {
     for(i=0; i<MaxInst ; i++) {
         DynInstCount++;
         CurrentInstruction = readWord(PC,false);  
-        printRegFile();
+        //printRegFile();
     
         //////////////////////////////////////////////////////////
         // Main Instruction Simulation
         //////////////////////////////////////////////////////////
         
+        //Determine what the OPCode for the current instruction is
+        //shift the current instruction 26 to the right to get the first 6 bits (OPCODE)
+        unsigned char opcode = ((CurrentInstruction) >> 26) & (0b00111111);
+        
+        //Look
+        //Test: print the opcode for the current instruction.
+        printf("Current opcode =  %s\n",byte_to_binary(opcode));
         
         
-        //After we are done, increase the program counter by 4.
-        PC = PC + 4;
+        //After we are done, increase the program counter.
+        PC = PC + 1;
         
         //////////////////////////////////////////////////////////
         // End of Main Instruction Simulation
