@@ -85,6 +85,121 @@ int main(int argc, char * argv[]) {
         //Look
         //Test: print the opcode for the current instruction.
         printf("Current opcode =  %s\n",byte_to_binary(opcode));
+
+        switch(opcode) {
+      case '0b1000' :
+      //addi
+     printf("--addi--\n" );
+         break;
+      case '0b1001' :
+      //addiu
+      printf("--addiu--\n" );
+      case '0b1100' :
+      //andi
+      printf("--andi--\n" );
+         break;
+      case '0b1110' :
+      //xori
+      printf("--xori--\n" );
+         break;
+      case '0b1101' :
+      //ori
+         printf("--ori--\n" );
+         break;
+     case '0b1010' :
+     //slti
+         printf("--slti--\n" );
+         break;
+     case '0b1011' :
+     //sltiu
+     printf("--sltiu--\n" );
+         break;
+     case '0b100' :
+     //beq
+       printf("--beq--\n" );
+         break;
+     case '0b10100' :
+     //beql
+     case '0b111' :
+     //bgtz
+        printf("--bgtz--\n" );
+         break;
+     case '0b110' :
+     //blez
+        printf("--blez--\n" );
+         break;
+    case '0b10110' :
+     //blezl
+       printf("--blezl--\n" );
+         break;
+    case '0b101' :
+     //bne
+        printf("--bne--\n" );
+         break;
+    case '0b1010' :
+     //blezl
+       printf("--blezl--\n" );
+         break;
+    case '0b10' :
+     //j
+        printf("--j--\n" );
+         break;
+    case '0b100000' :
+     //LB
+       printf("--LB--\n" );
+         break;
+    case '0b100100' :
+     //LBU
+       printf("--LBU--\n" );
+         break;
+    case '0b1000001' :
+     //LH
+       printf("--LH--\n" );
+         break;
+    case '0b100101' :
+     //LHU
+       printf("--LHU--\n" );
+         break;
+    case '0b1111' :
+     //LUI
+       printf("--LUI--\n" );
+         break;
+    case '0b10011' :
+     //LW
+       printf("--LW--\n" );
+         break;
+    case '0b100010' :
+     //LWL
+       printf("--LWL--\n" );
+         break;
+    case '0b100110' :
+     //LWR
+       printf("--LWR--\n" );
+         break;
+    case '0b101000' :
+     //SB
+       printf("--SB--\n");
+         break;
+    case '0b101001' :
+     //SH
+       printf("--LWR--\n" );
+         break;
+    case '0b101011' :
+     //SW
+       printf("--SW--\n" );
+         break;
+    case '0b101010' :
+     //SWL
+       printf("--SWL--\n" );
+         break;
+    case '0b101110' :
+     //SWR
+       printf("--LWR--\n" );
+         break;
+    case '0b100110' :
+      default :
+         printf("THE DEFAULT CASE WAS EXECUTED\n" );
+   }
         
         
         //After we are done, increase the program counter.
