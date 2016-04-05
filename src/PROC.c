@@ -28,7 +28,7 @@ void write_initialization_vector(uint32_t sp, uint32_t gp, uint32_t start) {
 const char *byte_to_binary(int x)
 {
     static char b[9];
-    b[0] = \0;
+    b[0] = 0;
     
     int z;
     for (z = 128; z > 0; z >>= 1)
@@ -88,115 +88,115 @@ int main(int argc, char * argv[]) {
 
         switch(opcode) {
 
-      case 0b1000 :
+      case 0b1000:
         //addi
         printf("--addi--\n" );
          break;
-      case 0b1001 :
+      case 0b1001:
         //addiu
         printf("--addiu--\n" );
         break;
-      case 0b1100 :
+      case 0b1100:
       //andi
       printf("--andi--\n" );
          break;
-      case 0b1110 :
+      case 0b1110:
       //xori
       printf("--xori--\n" );
          break;
-      case 0b1101 :
+      case 0b1101:
       //ori
          printf("--ori--\n" );
          break;
-     case 0b1010 :
+     case 0b1010:
      //slti
          printf("--slti--\n" );
          break;
-     case 0b1011 :
+     case 0b1011:
      //sltiu
      printf("--sltiu--\n" );
          break;
-     case 0b100 :
+     case 0b100:
      //beq
        printf("--beq--\n" );
          break;
-     case 0b10100 :
+     case 0b10100:
      //beql
         printf("--beql--" );
         break;
-     case 0b111 :
+     case 0b111:
      //bgtz
         printf("--bgtz--\n" );
          break;
-     case 0b110 :
+     case 0b110:
      //blez
         printf("--blez--\n" );
          break;
-    case 0b10110 :
+    case 0b10110:
      //blezl
        printf("--blezl--\n" );
          break;
-    case 0b101 :
+    case 0b101:
      //bne
         printf("--bne--\n" );
          break;
-    case 0b1010 :
+    case 0b1010:
      //blezl
        printf("--blezl--\n" );
          break;
-    case 0b10 :
+    case 0b10:
      //j
         printf("--j--\n" );
          break;
-    case 0b100000 :
+    case 0b100000:
      //LB
        printf("--LB--\n" );
          break;
-    case 0b100100 :
+    case 0b100100:
      //LBU
        printf("--LBU--\n" );
          break;
-    case 0b1000001 :
+    case 0b1000001:
      //LH
        printf("--LH--\n" );
          break;
-    case 0b100101 :
+    case 0b100101:
      //LHU
        printf("--LHU--\n" );
          break;
-    case 0b1111 :
+    case 0b1111:
      //LUI
        printf("--LUI--\n" );
          break;
-    case 0b10011 :
+    case 0b10011:
      //LW
        printf("--LW--\n" );
          break;
-    case 0b100010 :
+    case 0b100010:
      //LWL
        printf("--LWL--\n" );
          break;
-    case 0b100110 :
+    case 0b100110:
      //LWR
        printf("--LWR--\n" );
          break;
-    case 0b101000 :
+    case 0b101000:
      //SB
        printf("--SB--\n");
          break;
-    case 0b101001 :
+    case 0b101001:
      //SH
        printf("--LWR--\n" );
          break;
-    case 0b101011 :
+    case 0b101011:
      //SW
        printf("--SW--\n" );
          break;
-    case 0b101010 :
+    case 0b101010:
      //SWL
        printf("--SWL--\n" );
          break;
-    case 0b101110 :
+    case 0b101110:
      //SWR
        printf("--LWR--\n" );
          break;
@@ -216,91 +216,91 @@ int main(int argc, char * argv[]) {
                 //addu
                 printf("--addu--\n" );
                  break;
-            case 0b100010 :
+            case 0b100010:
                 //sub
                 printf("--sub--\n" );
                  break;
-            case 0b100011 :
+            case 0b100011:
                 //subu
                 printf("--subu--\n" );
                  break;
-            case 0b11010 :
+            case 0b11010:
                 //add
                 printf("--div--\n" );
                  break;
-            case 0b11011 :
+            case 0b11011:
                 //divu
                 printf("--divu--\n" );
                  break;
-            case 0b11000 :
+            case 0b11000:
                 //mult
                 printf("--mult--\n" );
                  break;
-            case 0b11001 :
+            case 0b11001:
                 //multu
                 printf("--multu--\n" );
                  break;
-            case 0b10000 :
+            case 0b10000:
                 //mfhi
                 printf("--mfhi--\n" );
                  break;
-            case 0b10010 :
+            case 0b10010:
                 //mflo
                 printf("--mflo--\n" );
                  break;
-            case 0b10001 :
+            case 0b10001:
                 //mthi
                 printf("--mthi--\n" );
                  break;
-            case 0b11001 :
+            case 0b11001:
                 //mtlo
                 printf("--mtlo--\n" );
                  break;
-            case 0b100100 :
+            case 0b100100:
                 //and
                 printf("--and--\n" );
                  break;
-            case 0b100110 :
+            case 0b100110:
                 //xor
                 printf("--xor--\n" );
                  break;
-            case 0b100111 :
+            case 0b100111:
                 //xor
                 printf("--nor--\n" );
                  break;
-            case 0b101010 :
+            case 0b101010:
                 //slt
                 printf("--slt--\n" );
                  break;
-            case 0b101011 :
+            case 0b101011:
                 //sltu
                 printf("--sltu--\n" );
                  break;
-            case 0b11 :
+            case 0b11:
                 //sra
                 printf("--sra--\n" );
                  break;
-            case 0b111 :
+            case 0b111:
                 //srav
                 printf("--srav--\n" );
                  break;
-            case 0b10 :
+            case 0b10:
                 //srl
                 printf("--srl--\n" );
                  break;
-            case 0b110 :
+            case 0b110:
                 //srlv
                 printf("--srlv--\n" );
                  break;
-            case 0b1001 :
+            case 0b1001:
                 //jalr
                 printf("--jalr--\n" );
                  break;
-            case 0b1000 :
+            case 0b1000:
                 //jr
                 printf("--jr--\n" );
                  break;
-            case 0b1100 :
+            case 0b1100:
                 //NOP
                 printf("--NOP--\n" );
                  break;
