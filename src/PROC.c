@@ -196,9 +196,113 @@ int main(int argc, char * argv[]) {
      //SWR
        printf("--LWR--\n" );
          break;
-    case '0b100110' :
+    case '0b0'
+        //SPECIAL CASE OPCODE = 0 
+        printf("SPECIAL CASE OPCODE = 0, NOW");
+        switch(opcode) {
+            case '0b100000' :
+                //add
+                printf("--add--\n" );
+                 break;
+            case '0b100001' :
+                //addu
+                printf("--addu--\n" );
+                 break;
+            case '0b100010' :
+                //sub
+                printf("--sub--\n" );
+                 break;
+            case '0b100011' :
+                //subu
+                printf("--subu--\n" );
+                 break;
+            case '0b11010' :
+                //add
+                printf("--div--\n" );
+                 break;
+            case '0b11011' :
+                //divu
+                printf("--divu--\n" );
+                 break;
+            case '0b11000' :
+                //mult
+                printf("--mult--\n" );
+                 break;
+            case '0b11001' :
+                //multu
+                printf("--multu--\n" );
+                 break;
+            case '0b10000' :
+                //mfhi
+                printf("--mfhi--\n" );
+                 break;
+            case '0b10010' :
+                //mflo
+                printf("--mflo--\n" );
+                 break;
+            case '0b10001' :
+                //mthi
+                printf("--mthi--\n" );
+                 break;
+            case '0b11001' :
+                //mtlo
+                printf("--mtlo--\n" );
+                 break;
+            case '0b100100' :
+                //and
+                printf("--and--\n" );
+                 break;
+            case '0b100110' :
+                //xor
+                printf("--xor--\n" );
+                 break;
+            case '0b100111' :
+                //xor
+                printf("--nor--\n" );
+                 break;
+            case '0b101010' :
+                //slt
+                printf("--slt--\n" );
+                 break;
+            case '0b101011' :
+                //sltu
+                printf("--sltu--\n" );
+                 break;
+            case '0b11' :
+                //sra
+                printf("--sra--\n" );
+                 break;
+            case '0b111' :
+                //srav
+                printf("--srav--\n" );
+                 break;
+            case '0b10' :
+                //srl
+                printf("--srl--\n" );
+                 break;
+            case '0b110' :
+                //srlv
+                printf("--srlv--\n" );
+                 break;
+            case '0b1001' :
+                //jalr
+                printf("--jalr--\n" );
+                 break;
+            case '0b1000' :
+                //jr
+                printf("--jr--\n" );
+                 break;
+            case '0b1100' :
+                //NOP
+                printf("--NOP--\n" );
+                 break;
+
+            default :
+         printf("THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
+        }
+
       default :
-         printf("THE DEFAULT CASE WAS EXECUTED\n" );
+         printf("THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
    }
         
         
