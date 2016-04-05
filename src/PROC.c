@@ -286,24 +286,27 @@ int main(int argc, char * argv[]) {
             case 0b101011:
                 //sltu
                 printf("--sltu--\n" );
+                RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                  break;
             case 0b11:
                 //sra
                 printf("--sra--\n" );
+                RegFile[RD] = RegFile[RT] + RegFile[shamt];
                  break;
             case 0b111:
                 //srav
                 printf("--srav--\n" );
+                RegFile[RD] = RegFile[RT] >> RegFile[RS];
                  break;
             case 0b10:
                 //srl
                 printf("--srl--\n" );
-                RegFile[RD] = RegFile[RT] >> RegFile[shamt]
+                RegFile[RD] = RegFile[RT] >> RegFile[shamt];
                  break;
             case 0b110:
                 //srlv
                 printf("--srlv--\n" );
-                RegFile[RD] = RegFile[RT] >> RegFile[RS]
+                RegFile[RD] = RegFile[RT] >> RegFile[RS];
                  break;
             case 0b1001:
                 //jalr
