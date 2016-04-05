@@ -233,9 +233,10 @@ int main(int argc, char * argv[]) {
             case 0b100011:
                 //subu
                 printf("--subu--\n" );
+                RegFile[RD] = RegFile[RS] + RegFile[RT];
                  break;
             case 0b11010:
-                //add
+                //div
                 printf("--div--\n" );
                  break;
             case 0b11011:
@@ -297,6 +298,7 @@ int main(int argc, char * argv[]) {
             case 0b10:
                 //srl
                 printf("--srl--\n" );
+                RegFile[RD] = RegFile[RT] >> RegFile[shamt]
                  break;
             case 0b110:
                 //srlv
@@ -313,6 +315,7 @@ int main(int argc, char * argv[]) {
             case 0b1100:
                 //NOP
                 printf("--NOP--\n" );
+                //DO NOTHING
                  break;
 
         default:
