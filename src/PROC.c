@@ -208,7 +208,7 @@ int main(int argc, char * argv[]) {
         printf("FUNC = %s\n",byte_to_binary(SPECIAL));
         // getting the last bits to compare in second switch statment
         //Getting RS, RT, RD, shamt
-        unsigned char RS, RT, RD, shamt;
+        unsigned char RS, RT, RD, shamt, temp;
         RS = ((CurrentInstruction) >> 21) & (0b00111111);
         RT = ((CurrentInstruction) >> 16) & (0b00111111);
         RD = ((CurrentInstruction) >> 11) & (0b00111111);
@@ -218,6 +218,7 @@ int main(int argc, char * argv[]) {
             case 0b100000:
                 //add
                 printf("--add--\n" );
+                RegFile[RD] = RegFile[RS] + RegFile[RT];
                  break;
             case 0b100001:
                 //addu
