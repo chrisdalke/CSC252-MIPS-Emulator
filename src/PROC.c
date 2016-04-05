@@ -15,39 +15,67 @@
 
 //Opcode Values
 
-#define OP_SPECIAL 0b00000000;
-#define OP_REGIMM  0b00000001;
-#define OP_ADDI    0b00001000;
-#define OP_ADDIU   0b00001001;
-#define OP_ANDI    0b00001100;
-#define OP_XORI    0b00001110;
-#define OP_ORI     0b00001101;
-#define OP_SLTI    0b00001010;
-#define OP_SLTIU   0b00001011;
-#define OP_BEQ     0b00000100;
-#define OP_BEQL    0b00010100;
-#define OP_BGTZ    0b00000111;
-#define OP_BLEZ    0b00000110;
-#define OP_BLEZL   0b00010110;
-#define OP_BNE     0b00000101;
-#define OP_BNEL    0b00010101;
-#define OP_J       0b00000010;
-#define OP_JAL     0b00000011;
-#define OP_LB      0b00100000;
-#define OP_LBU     0b00100100;
-#define OP_LH      0b00100001;
-#define OP_LHU     0b00100101;
-#define OP_LUI     0b00001111;
-#define OP_LW      0b00100011;
-#define OP_LWL     0b00100010;
-#define OP_LWR     0b00100110;
-#define OP_SB      0b00101000;
-#define OP_SH      0b00101001;
-#define OP_SW      0b00101011;
-#define OP_SWL     0b00101010;
-#define OP_SWR     0b00101110;
+#define  OP_SPECIAL 0b00000000;
+#define  OP_REGIMM  0b00000001;
+#define  OP_ADDI    0b00001000;
+#define  OP_ADDIU   0b00001001;
+#define  OP_ANDI    0b00001100;
+#define  OP_XORI    0b00001110;
+#define  OP_ORI     0b00001101;
+#define  OP_SLTI    0b00001010;
+#define  OP_SLTIU   0b00001011;
+#define  OP_BEQ     0b00000100;
+#define  OP_BEQL    0b00010100;
+#define  OP_BGTZ    0b00000111;
+#define  OP_BLEZ    0b00000110;
+#define  OP_BLEZL   0b00010110;
+#define  OP_BNE     0b00000101;
+#define  OP_BNEL    0b00010101;
+#define  OP_J       0b00000010;
+#define  OP_JAL     0b00000011;
+#define  OP_LB      0b00100000;
+#define  OP_LBU     0b00100100;
+#define  OP_LH      0b00100001;
+#define  OP_LHU     0b00100101;
+#define  OP_LUI     0b00001111;
+#define  OP_LW      0b00100011;
+#define  OP_LWL     0b00100010;
+#define  OP_LWR     0b00100110;
+#define  OP_SB      0b00101000;
+#define  OP_SH      0b00101001;
+#define  OP_SW      0b00101011;
+#define  OP_SWL     0b00101010;
+#define  OP_SWR     0b00101110;
 
 //Func Values
+
+#define FUNC_ADD    0b00100000;
+#define FUNC_ADDU   0b00000001;
+#define FUNC_SUB    0b00000010;
+#define FUNC_SUBU   0b00000011;
+#define FUNC_DIV    0b00011010;
+#define FUNC_DIVU   0b00011011;
+#define FUNC_MULT   0b00011000;
+#define FUNC_MULTU  0b00011000;
+#define FUNC_MFHI   0b00010000;
+#define FUNC_MFLO   0b00010010;
+#define FUNC_MTHI   0b00010001;
+#define FUNC_MTLO   0b00010011;
+#define FUNC_AND    0b00100100;
+#define FUNC_XOR    0b00100110;
+#define FUNC_NOR    0b00100110;
+#define FUNC_OR     0b00100101;
+#define FUNC_SLL    0b00000000;
+#define FUNC_SLLV   0b00000100;
+#define FUNC_SLT    0b00101010;
+#define FUNC_SLTU   0b00101011;
+#define FUNC_SRA    0b00000011;
+#define FUNC_SRAV   0b00000111;
+#define FUNC_SRL    0b00000010;
+#define FUNC_SRLV   0b00000110;
+#define FUNC_JALR   0b00001001;
+#define FUNC_JR     0b00001000;
+#define FUNC_NOP    0b00000000;
 
 //////////////////////////////////////////////////////////
 // End of File
@@ -127,179 +155,71 @@ int main(int argc, char * argv[]) {
         //shift the current instruction 26 to the right to get the first 6 bits (OPCODE)
         unsigned char opcode = ((CurrentInstruction) >> 26) & (0b00111111);
         
-        
-        //list of codes
-        //OPCODES:
-        
-        
-        
-        //FUNC CODES:
-        //SPECIAL
-        const unsigned char add = 0;
-        
-        
-        //Look
         //Test: print the opcode for the current instruction.
         printf("Current opcode =  %s\n",byte_to_binary(opcode));
         
         switch(opcode) {
-                <<<<<<< Updated upstream
                 
-            case 0b1000:
-                //addi
-                printf("--addi--\n" );
+            case  OP_ADDI:
                 break;
-            case 0b1001:
-                //addiu
-                printf("--addiu--\n" );
+            case  OP_ADDIU:
                 break;
-            case 0b1100:
-                //andi
-                printf("--andi--\n" );
+            case  OP_ANDI:
                 break;
-            case 0b1110:
-                //xori
-                printf("--xori--\n" );
+            case  OP_XORI:
                 break;
-            case 0b1101:
-                //ori
-                printf("--ori--\n" );
+            case  OP_ORI:
                 break;
-            case 0b1010:
-                //slti
-                printf("--slti--\n" );
+            case  OP_SLTI:
                 break;
-            case 0b1011:
-                //sltiu
-                printf("--sltiu--\n" );
+            case  OP_SLTIU:
                 break;
-            case 0b100:
-                //beq
-                printf("--beq--\n" );
+            case  OP_BEQ:
                 break;
-            case 0b10100:
-                //beql
-                printf("--beql--" );
+            case  OP_BEQL:
                 break;
-            case 0b111:
-                //bgtz
-                printf("--bgtz--\n" );
+            case  OP_BGTZ:
                 break;
-            case 0b110:
-                //blez
-                printf("--blez--\n" );
+            case  OP_BLEZ:
                 break;
-            case 0b10110:
-                //blezl
-                printf("--blezl--\n" );
+            case  OP_BLEZL:
                 break;
-            case 0b101:
-                //bne
-                printf("--bne--\n" );
+            case  OP_BNE:
                 break;
-            case 0b1010:
-                //blezl
-                printf("--blezl--\n" );
+            case  OP_BNEL:
                 break;
-            case 0b10:
-                //j
-                printf("--j--\n" );
+            case  OP_J:
                 break;
-            case 0b100000:
-                //LB
-                printf("--LB--\n" );
+            case  OP_JAL:
                 break;
-            case 0b100100:
-                //LBU
-                printf("--LBU--\n" );
+            case  OP_LB:
                 break;
-            case 0b1000001:
-                //LH
-                printf("--LH--\n" );
+            case  OP_LBU:
                 break;
-            case 0b100101:
-                //LHU
-                printf("--LHU--\n" );
+            case  OP_LH:
                 break;
-            case 0b1111:
-                //LUI
-                printf("--LUI--\n" );
+            case  OP_LHU:
                 break;
-            case 0b10011:
-                //LW
-                printf("--LW--\n" );
+            case  OP_LUI:
                 break;
-            case 0b100010:
-                //LWL
-                printf("--LWL--\n" );
+            case  OP_LW:
                 break;
-            case 0b100110:
-                //LWR
-                printf("--LWR--\n" );
+            case  OP_LWL:
                 break;
-            case 0b101000:
-                //SB
-                printf("--SB--\n");
+            case  OP_LWR:
                 break;
-            case 0b101001:
-                //SH
-                printf("--LWR--\n" );
+            case  OP_SB:
                 break;
-            case 0b101011:
-<<<<<<< HEAD
-                //sltu
-                printf("--sltu--\n" );
-                RegFile[RD] = (RegFile[RS] < RegFile[RT]);
-                 break;
-            case 0b11:
-                //sra
-                printf("--sra--\n" );
-                RegFile[RD] = RegFile[RT] + RegFile[shamt];
-                 break;
-            case 0b111:
-                //srav
-                printf("--srav--\n" );
-                RegFile[RD] = RegFile[RT] >> RegFile[RS];
-                 break;
-            case 0b10:
-                //srl
-                printf("--srl--\n" );
-                RegFile[RD] = RegFile[RT] >> RegFile[shamt];
-                 break;
-            case 0b110:
-                //srlv
-                printf("--srlv--\n" );
-                RegFile[RD] = RegFile[RT] >> RegFile[RS];
-                 break;
-            case 0b1001:
-                //jalr
-                printf("--jalr--\n" );
-                 break;
-            case 0b1000:
-                //jr
-                printf("--jr--\n" );
-                 break;
-            case 0b1100:
-                //NOP
-                printf("--NOP--\n" );
-                //DO NOTHING
-                 break;
-
-        default:
-            printf("THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
-=======
-                //SW
-                printf("--SW--\n" );
+            case  OP_SH:
                 break;
-            case 0b101010:
-                //SWL
-                printf("--SWL--\n" );
+            case  OP_SW:
                 break;
-            case 0b101110:
-                //SWR
-                printf("--LWR--\n" );
+            case  OP_SWL:
                 break;
-            case 0b0:
+            case  OP_SWR:
+                break;
+            case  OP_SPECIAL:
+                
                 //SPECIAL CASE OPCODE = 0
                 //TO CHNAGE NEED TO CHANGE THE DO BITWISE TO GET THE BITS TO COMPARE
                 printf("SPECIAL CASE OPCODE = 0");
@@ -314,109 +234,90 @@ int main(int argc, char * argv[]) {
                 shamt = ((CurrentInstruction) >> 6) & (0b00111111);
                 
                 switch(SPECIAL) {
-                    case 0b100000:
-                        //add
-                        printf("--add--\n" );
+                        
+                    case FUNC_ADD:
                         break;
-                    case 0b100001:
-                        //addu
-                        printf("--addu--\n" );
+                    case FUNC_ADDU:
                         break;
-                    case 0b100010:
-                        //sub
-                        printf("--sub--\n" );
+                    case  FUNC_SUB:
                         break;
-                    case 0b100011:
-                        //subu
-                        printf("--subu--\n" );
+                    case  FUNC_SUBU:
                         break;
-                    case 0b11010:
-                        //add
-                        printf("--div--\n" );
+                    case FUNC_DIV:
                         break;
-                    case 0b11011:
-                        //divu
-                        printf("--divu--\n" );
+                    case  FUNC_DIVU:
                         break;
-                    case 0b11000:
-                        //mult
-                        printf("--mult--\n" );
+                    case  FUNC_MULT:
                         break;
-                    case 0b11001:
-                        //multu
-                        printf("--multu--\n" );
+                    case  FUNC_MULTU:
                         break;
-                    case 0b10000:
-                        //mfhi
-                        printf("--mfhi--\n" );
+                    case  FUNC_MFHI:
                         break;
-                    case 0b10010:
-                        //mflo
-                        printf("--mflo--\n" );
+                    case  FUNC_MFLO:
                         break;
-                    case 0b10001:
-                        //mthi
-                        printf("--mthi--\n" );
+                    case  FUNC_SLT:
                         break;
-                    case 0b11001:
-                        //mtlo
-                        printf("--mtlo--\n" );
+                    case  FUNC_MTHI:
                         break;
-                    case 0b100100:
-                        //and
-                        printf("--and--\n" );
+                    case  FUNC_SLT:
                         break;
-                    case 0b100110:
-                        //xor
-                        printf("--xor--\n" );
+                    case  FUNC_MTLO:
                         break;
-                    case 0b100111:
-                        //xor
-                        printf("--nor--\n" );
+                    case  FUNC_SLT:
                         break;
-                    case 0b101010:
-                        //slt
-                        printf("--slt--\n" );
+                    case  FUNC_AND:
                         break;
-                    case 0b101011:
-                        //sltu
-                        printf("--sltu--\n" );
+                    case  FUNC_SLT:
                         break;
-                    case 0b11:
-                        //sra
-                        printf("--sra--\n" );
+                    case  FUNC_XOR:
                         break;
-                    case 0b111:
-                        //srav
-                        printf("--srav--\n" );
+                    case  FUNC_SLT:
                         break;
-                    case 0b10:
-                        //srl
-                        printf("--srl--\n" );
+                    case  FUNC_NOR:
                         break;
-                    case 0b110:
-                        //srlv
-                        printf("--srlv--\n" );
+                    case  FUNC_SLT:
                         break;
-                    case 0b1001:
-                        //jalr
-                        printf("--jalr--\n" );
+                    case  FUNC_OR:
                         break;
-                    case 0b1000:
-                        //jr
-                        printf("--jr--\n" );
+                    case  FUNC_SLT:
                         break;
-                    case 0b1100:
-                        //NOP
-                        printf("--NOP--\n" );
+                    case FUNC_SLL
+                        break;
+                    case  FUNC_SLT:
+                        break;
+                    case FUNC_SLLV
+                        break;
+                    case  FUNC_SLT:
+                        break;
+                    case  FUNC_SLT:
+                        break;
+                    case  FUNC_SLTU:
+                        break;
+                    case  FUNC_SRA:
+                        break;
+                    case FUNC_SRAV:
+                        break;
+                    case  FUNC_SRL:
+                        break;
+                    case  FUNC_SRLV:
+                        break;
+                    case  FUNC_JALR:
+                        break;
+                    case  FUNC_JR:
+                        break;
+                    case FUNC_NOP:
                         break;
                         
                     default:
                         printf("THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
                 }
                 
+                break;
+            case  OP_REGIMM:
+                break;
             default:
                 printf("THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
+                break;
         }
         
         //After we are done, increase the program counter.
