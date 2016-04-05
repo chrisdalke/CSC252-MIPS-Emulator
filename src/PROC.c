@@ -199,8 +199,9 @@ int main(int argc, char * argv[]) {
     case '0b0'
         //SPECIAL CASE OPCODE = 0 
         //TO CHNAGE NEED TO CHANGE THE DO BITWISE TO GET THE BITS TO COMPARE
-        printf("SPECIAL CASE OPCODE = 0, NOW");
-        switch(opcode) {
+        printf("SPECIAL CASE OPCODE = 0");
+        unsigned char SPECIAL = ((opcode) << 26) & (0b00111111);
+        switch(SPECIAL) {
             case '0b100000' :
                 //add
                 printf("--add--\n" );
