@@ -223,6 +223,7 @@ int main(int argc, char * argv[]) {
             case 0b100001:
                 //addu
                 printf("--addu--\n" );
+                ReFile[RD] = RegFile[RS] + RegFile[RT];
                  break;
             case 0b100010:
                 //sub
