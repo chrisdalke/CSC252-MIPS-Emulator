@@ -207,6 +207,13 @@ int main(int argc, char * argv[]) {
         unsigned char SPECIAL = ((opcode)) & (0b00111111);
         printf("FUNC = %s\n",byte_to_binary(SPECIAL));
         // getting the last bits to compare in second switch statment
+        //Getting RS, RT, RD, shamt
+        unsigned char RS, RT, RD, shamt;
+        RS = ((CurrentInstruction) >> 21) & (0b00111111);
+        RT = ((CurrentInstruction) >> 16) & (0b00111111);
+        RD = ((CurrentInstruction) >> 11) & (0b00111111);
+        shamt = ((CurrentInstruction) >> 6) & (0b00111111);
+
         switch(SPECIAL) {
             case 0b100000:
                 //add
