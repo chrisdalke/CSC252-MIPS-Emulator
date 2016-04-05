@@ -303,6 +303,7 @@ int main(int argc, char * argv[]) {
             case 0b110:
                 //srlv
                 printf("--srlv--\n" );
+                RegFile[RD] = RegFile[RT] >> RegFile[RS]
                  break;
             case 0b1001:
                 //jalr
