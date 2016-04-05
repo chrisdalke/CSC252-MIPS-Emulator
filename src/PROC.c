@@ -198,6 +198,7 @@ int main(int argc, char * argv[]) {
          break;
     case '0b0'
         //SPECIAL CASE OPCODE = 0 
+        //TO CHNAGE NEED TO CHANGE THE DO BITWISE TO GET THE BITS TO COMPARE
         printf("SPECIAL CASE OPCODE = 0, NOW");
         switch(opcode) {
             case '0b100000' :
@@ -297,8 +298,8 @@ int main(int argc, char * argv[]) {
                 printf("--NOP--\n" );
                  break;
 
-            default :
-         printf("THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
+        default :
+            printf("THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
         }
 
       default :
