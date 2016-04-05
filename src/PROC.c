@@ -87,13 +87,15 @@ int main(int argc, char * argv[]) {
         printf("Current opcode =  %s\n",byte_to_binary(opcode));
 
         switch(opcode) {
+
       case '0b1000' :
-      //addi
-     printf("--addi--\n" );
+        //addi
+        printf("--addi--\n" );
          break;
       case '0b1001' :
-      //addiu
-      printf("--addiu--\n" );
+        //addiu
+        printf("--addiu--\n" );
+        break;
       case '0b1100' :
       //andi
       printf("--andi--\n" );
@@ -120,6 +122,8 @@ int main(int argc, char * argv[]) {
          break;
      case '0b10100' :
      //beql
+        printf("--beql--" );
+        break;
      case '0b111' :
      //bgtz
         printf("--bgtz--\n" );
@@ -200,12 +204,13 @@ int main(int argc, char * argv[]) {
         //SPECIAL CASE OPCODE = 0 
         //TO CHNAGE NEED TO CHANGE THE DO BITWISE TO GET THE BITS TO COMPARE
         printf("SPECIAL CASE OPCODE = 0");
-        unsigned char SPECIAL = ((opcode) << 26) & (0b00111111);
+        unsigned char SPECIAL = ((opcode) << 26) & (0b00111111); 
+        // getting the last bits to compare in second switch statment
         switch(SPECIAL) {
             case '0b100000' :
                 //add
                 printf("--add--\n" );
-                 break;
+                 break;`
             case '0b100001' :
                 //addu
                 printf("--addu--\n" );
