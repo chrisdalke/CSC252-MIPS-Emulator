@@ -236,12 +236,18 @@ int main(int argc, char * argv[]) {
                 switch(SPECIAL) {
                         
                     case FUNC_ADD:
+                        //Todo: overflow behavior?
+                        RegFile[RD] = RegFile[RS] + RegFile[RT];
                         break;
                     case FUNC_ADDU:
+                        RegFile[RD] = RegFile[RS] + RegFile[RT];
                         break;
                     case  FUNC_SUB:
+                        //Todo: overflow behavior?
+                        RegFile[RD] = RegFile[RS] - RegFile[RT];
                         break;
                     case  FUNC_SUBU:
+                        RegFile[RD] = RegFile[RS] - RegFile[RT];
                         break;
                     case FUNC_DIV:
                         break;
@@ -292,22 +298,27 @@ int main(int argc, char * argv[]) {
                     case  FUNC_SLT:
                         break;
                     case  FUNC_SLTU:
+                        RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
                     case  FUNC_SRA:
+                        RegFile[RD] = RegFile[RT] + RegFile[shamt];
                         break;
                     case FUNC_SRAV:
+                        RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
                     case  FUNC_SRL:
+                        RegFile[RD] = RegFile[RT] >> RegFile[shamt];
                         break;
                     case  FUNC_SRLV:
+                        RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
                     case  FUNC_JALR:
                         break;
                     case  FUNC_JR:
                         break;
                     case FUNC_NOP:
+                        //Do nothing
                         break;
-                        
                     default:
                         printf("THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
                 }
