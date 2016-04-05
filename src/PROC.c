@@ -218,7 +218,7 @@ int main(int argc, char * argv[]) {
             case 0b100000:
                 //add
                 printf("--add--\n" );
-                 break;`
+                 break;
             case 0b100001:
                 //addu
                 printf("--addu--\n" );
