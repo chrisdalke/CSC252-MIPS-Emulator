@@ -150,6 +150,9 @@ int main(int argc, char * argv[]) {
     printf("\n ----- Execute Program ----- \n");
     printf("Max Instruction to run = %d \n",MaxInst);
     PC = exec.GPC_START;
+    
+    newPC = -1;
+    
     for(i=0; i<MaxInst ; i++) {
         DynInstCount++;
         CurrentInstruction = readWord(PC,false);
@@ -167,18 +170,24 @@ int main(int argc, char * argv[]) {
         printf("Current opcode =  %s\n",byte_to_binary(opcode));
         
         //Preload some variables that will be used for many commands
-        unsigned char RS, RT, immediate;
+        unsigned char RS, RT, RD, shamt, temp, HIGH, LOW, immediate;
         RS = ((CurrentInstruction) >> 21) & (0b00111111);
         RT = ((CurrentInstruction) >> 16) & (0b00111111);
-        immediate = ((CurrentInstruction) >> 6) & (0b00111111);
+        immediate = ((CurrentInstruction)) & (0b1111111111111111);
+        
+        
+        //Handle branch delay slot
+        if (newPC != -1){
+            //We should jump ahead to the next instruction
+            PC = newPC;
+            newPC = -1;
+        }
         
         switch(opcode) {
-                unsigned char RS, RT, RD, shamt, temp, HIGH, LOW, immediate;
-                RS = ((CurrentInstruction) >> 21) & (0b0011111);
-                RT = ((CurrentInstruction) >> 16) & (0b0011111);
-                immediate = ((CurrentInstruction)) & (0b1111111111111111);
             case  OP_ADDI:
-                RegFile[RT] = RegFile[RS] + RegFile[immediate]; //not sure if its immediate or RegFile[immediate] 
+                RegFile[RT] = RegFile[RS] + immediate;
+                //not sure if its immediate or RegFile[immediate]
+                // This is using immediate since the data is stored in the current instruction not the register file
                 break;
             case  OP_ADDIU:
                 temp = RegFile[RS] + signExtension(immediate);
@@ -188,15 +197,35 @@ int main(int argc, char * argv[]) {
                 RegFile[RT] = RegFile[RS] + signExtension(immediate);
                 break;
             case  OP_XORI:
-                
+                RegFile[RT] = RegFile[RS] ^ immediate;
                 break;
             case  OP_ORI:
+                RegFile[RT] = RegFile[RS] | immediate;
                 break;
             case  OP_SLTI:
+                
+                if (RegFile[RS] < signExtension(immediate)) {
+                    RegFile[RS] = 1;
+                } else {
+                    RegFile[RS] = 0;
+                }
+                
                 break;
             case  OP_SLTIU:
+                
+                //This implementation taken from the mips handbook
+                //Check to make sure this actually works properly
+                if (0 || RegFile[RS]) < (0 || signExtension(immediate)) {
+                    RegFile[RS] = 1;
+                } else {
+                    RegFile[RS] = 0;
+                }
+                
                 break;
             case  OP_BEQ:
+                
+                //TODO: Figure out how to implement branch command
+                
                 break;
             case  OP_BEQL:
                 break;
@@ -211,8 +240,20 @@ int main(int argc, char * argv[]) {
             case  OP_BNEL:
                 break;
             case  OP_J:
+                
+                //Update newPC, our target program counter
+                newPC = PC + immediate;
+                
                 break;
             case  OP_JAL:
+                
+                
+                //Update newPC, our target program counter
+                newPC = PC + immediate;
+                
+                //record the current address into RegFile[31]
+                RegFile[31] = PC;
+                
                 break;
             case  OP_LB:
                 break;
@@ -225,16 +266,32 @@ int main(int argc, char * argv[]) {
             case  OP_LUI:
                 break;
             case  OP_LW:
+                
+                //load the word given by the address into the specified register
+                RegFile[RT] = readWord(RS + immediate,false);
+                
                 break;
             case  OP_LWL:
+                
+                //Loads the most-significant part of a word as a signed value from an unaligned memory address
+                //TODO
+                
                 break;
             case  OP_LWR:
+                
+                //Loads the least-significant part of a word as a signed value from an unaligned memory address
+                //TODO
+                
                 break;
             case  OP_SB:
                 break;
             case  OP_SH:
                 break;
             case  OP_SW:
+                
+                //Stores a word into the specified memory location
+                writeWord(RS + immediate,RegFile[RT],false);
+                
                 break;
             case  OP_SWL:
                 break;
@@ -248,9 +305,6 @@ int main(int argc, char * argv[]) {
                 unsigned char SPECIAL = ((opcode)) & (0b00111111);
                 printf("FUNC = %s\n",byte_to_binary(SPECIAL));
                 // getting the last bits to compare in second switch statment
-
-                //Getting RD, shamt
-                unsigned char RD, shamt, temp, HIGH, LOW;
 
                 RD = ((CurrentInstruction) >> 11) & (0b00111111);
                 shamt = ((CurrentInstruction) >> 6) & (0b00111111);
