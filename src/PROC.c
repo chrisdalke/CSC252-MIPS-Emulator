@@ -262,46 +262,29 @@ int main(int argc, char * argv[]) {
                     case  FUNC_MFLO:
                         break;
                     case  FUNC_SLT:
+                        RegFile[RD] = (RegFile[RS] < RegFile[RT])
                         break;
                     case  FUNC_MTHI:
                         break;
-                    case  FUNC_SLT:
-                        break;
                     case  FUNC_MTLO:
-                        break;
-                    case  FUNC_SLT:
                         break;
                     case  FUNC_AND:
                     RegFile[RD] = RegFile[RS] & RegFile[RT];  // and
                         break;
-                    case  FUNC_SLT:
-                        break;
                     case  FUNC_XOR:
                     RegFile[RD] = RegFile[RS] ^ RegFile[RT]//xor
-                        break;
-                    case  FUNC_SLT:
                         break;
                     case  FUNC_NOR:
                     RegFile[RD] = RegFile[RS] ~ RegFile[RT]//NOR
                         break;
-                    case  FUNC_SLT:
-                        break;
                     case  FUNC_OR:
                     RegFile[RD] = RegFile[RS] | RegFile[RT]//or
-                        break;
-                    case  FUNC_SLT:
                         break;
                     case FUNC_SLL
                     RegFile[RD] = RegFile[RT] << RegFile[SA]//SLL
                         break;
-                    case  FUNC_SLT:
-                        break;
                     case FUNC_SLLV
                     RegFile[RD] = RegFile[RT] << RegFile[RS]//sllv
-                        break;
-                    case  FUNC_SLT:
-                        break;
-                    case  FUNC_SLT:
                         break;
                     case  FUNC_SLTU:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
