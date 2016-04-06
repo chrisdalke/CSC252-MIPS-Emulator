@@ -159,15 +159,27 @@ int main(int argc, char * argv[]) {
         //Test: print the opcode for the current instruction.
         printf("Current opcode =  %s\n",byte_to_binary(opcode));
         
+        //Preload some variables that will be used for many commands
+        unsigned char RS, RT, immediate;
+        RS = ((CurrentInstruction) >> 21) & (0b00111111);
+        RT = ((CurrentInstruction) >> 16) & (0b00111111);
+        immediate = ((CurrentInstruction) >> 6) & (0b00111111);
+        
         switch(opcode) {
                 
             case  OP_ADDI:
+                
+                
+                
                 break;
             case  OP_ADDIU:
+                
                 break;
             case  OP_ANDI:
+                
                 break;
             case  OP_XORI:
+                
                 break;
             case  OP_ORI:
                 break;
@@ -227,10 +239,8 @@ int main(int argc, char * argv[]) {
                 unsigned char SPECIAL = ((opcode)) & (0b00111111);
                 printf("FUNC = %s\n",byte_to_binary(SPECIAL));
                 // getting the last bits to compare in second switch statment
-                //Getting RS, RT, RD, shamt
-                unsigned char RS, RT, RD, shamt, temp, HIGH, LOW;
-                RS = ((CurrentInstruction) >> 21) & (0b00111111);
-                RT = ((CurrentInstruction) >> 16) & (0b00111111);
+                //Getting RD, shamt
+                unsigned char RD, shamt, temp, HIGH, LOW;
                 RD = ((CurrentInstruction) >> 11) & (0b00111111);
                 shamt = ((CurrentInstruction) >> 6) & (0b00111111);
                 
