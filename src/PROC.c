@@ -8,6 +8,7 @@
 #include "utils/heap.h"
 #include "elf_reader/elf_reader.h"
 #include "instructionConstants.h"
+#include <stdint.h> // put in here for 64 bit number
 
 //////////////////////////////////////////////////////////
 // Instruction Constants
@@ -227,7 +228,7 @@ int main(int argc, char * argv[]) {
                 printf("FUNC = %s\n",byte_to_binary(SPECIAL));
                 // getting the last bits to compare in second switch statment
                 //Getting RS, RT, RD, shamt
-                unsigned char RS, RT, RD, shamt, temp;
+                unsigned char RS, RT, RD, shamt, temp, HIGH, LOW;
                 RS = ((CurrentInstruction) >> 21) & (0b00111111);
                 RT = ((CurrentInstruction) >> 16) & (0b00111111);
                 RD = ((CurrentInstruction) >> 11) & (0b00111111);
@@ -236,26 +237,39 @@ int main(int argc, char * argv[]) {
                 switch(SPECIAL) {
                         
                     case FUNC_ADD:
-                        //Todo: overflow behavior?
+                        //Todo: overflow behavior? SEE PROJECT DESCP(BB) -> WE DO NOT NEED TO DO THIS
                         RegFile[RD] = RegFile[RS] + RegFile[RT];
                         break;
                     case FUNC_ADDU:
                         RegFile[RD] = RegFile[RS] + RegFile[RT];
                         break;
                     case  FUNC_SUB:
-                        //Todo: overflow behavior?
+                        //Todo: overflow behavior? SEE PROJECT DESCP(BB) -> WE DO NOT NEED TO DO THIS
                         RegFile[RD] = RegFile[RS] - RegFile[RT];
                         break;
                     case  FUNC_SUBU:
                         RegFile[RD] = RegFile[RS] - RegFile[RT];
                         break;
-                    case FUNC_DIV:
+                    case FUNC_DIV: //if you div by 0, answer is UNPREDICTABLE!
+                        int64_t lowNumber = RegFile[RS] / RegFile[RT];
+                        LOW = lowNumber;
+
+                        int64_t highNumber = RegFile[RS] % RegFile[RT];
+                        HIGH = highNumber;
                         break;
                     case  FUNC_DIVU:
                         break;
-                    case  FUNC_MULT:
+                    case  FUNC_MULT: //not sure if I did this correctly
+                            //high = 0-31, of 64 bit number, 32-64 is low, see ->
+                            int64_t finalNumber = RegFile[RS] * RegFile[RT];
+                            HIGH = ((finalNumber >> 31) & (0b00111111));
+                            LOW = ((finalNumber << 31) & (0b00111111));
                         break;
-                    case  FUNC_MULTU:
+                    case  FUNC_MULTU: // same as above
+                      //high = 0-31, of 64 bit number, 32-64 is low, see ->
+                            int64_t finalNumber = (RegFile[RS] * RegFile[RT]);
+                            HIGH = ((finalNumber >> 31) & (0b00111111));
+                            LOW = ((finalNumber << 31) & (0b00111111));
                         break;
                     case  FUNC_MFHI:
                         break;
