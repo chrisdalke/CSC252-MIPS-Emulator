@@ -258,6 +258,11 @@ int main(int argc, char * argv[]) {
                         HIGH = highNumber;
                         break;
                     case  FUNC_DIVU:
+                        int64_t lowNumber = RegFile[RS] / RegFile[RT];
+                        LOW = lowNumber;
+
+                        int64_t highNumber = RegFile[RS] % RegFile[RT];
+                        HIGH = highNumber;
                         break;
                     case  FUNC_MULT: //not sure if I did this correctly
                             //high = 0-31, of 64 bit number, 32-64 is low, see ->
@@ -272,15 +277,20 @@ int main(int argc, char * argv[]) {
                             LOW = ((finalNumber << 31) & (0b00111111));
                         break;
                     case  FUNC_MFHI:
+                        RegFile[RD] = HIGH;
                         break;
                     case  FUNC_MFLO:
+                        Regfile[RD] = LOW;
                         break;
                     case  FUNC_SLT:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT])
                         break;
-                    case  FUNC_MTHI:
+                    case  FUNC_MTHI: // a div, mult, or something with high low must be used
+                                     // before this command
+                        HIGH = RegFile[RS];
                         break;
                     case  FUNC_MTLO:
+                        LOW = RegFile[RS];
                         break;
                     case  FUNC_AND:
                     RegFile[RD] = RegFile[RS] & RegFile[RT];  // and
