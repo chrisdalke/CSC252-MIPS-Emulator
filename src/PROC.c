@@ -95,8 +95,15 @@ void write_initialization_vector(uint32_t sp, uint32_t gp, uint32_t start) {
     printRegFile();
     
 }
-
-
+//THIS IS USED for some of the addi methods
+int signExtension(int instr) {
+    int value = (0x0000FFFF & instr);
+    int mask = 0x00008000;
+    if (mask & instr) {
+        value += 0xFFFF0000;
+    }
+    return value;
+}
 //Function that converts a byte to binary
 //REMOVE BEFORE SUBMITTING
 const char *byte_to_binary(int x)
@@ -166,17 +173,19 @@ int main(int argc, char * argv[]) {
         immediate = ((CurrentInstruction) >> 6) & (0b00111111);
         
         switch(opcode) {
-                
+                unsigned char RS, RT, RD, shamt, temp, HIGH, LOW, immediate;
+                RS = ((CurrentInstruction) >> 21) & (0b0011111);
+                RT = ((CurrentInstruction) >> 16) & (0b0011111);
+                immediate = ((CurrentInstruction)) & (0b1111111111111111);
             case  OP_ADDI:
-                
-                
-                
+                RegFile[RT] = RegFile[RS] + RegFile[immediate]; //not sure if its immediate or RegFile[immediate] 
                 break;
             case  OP_ADDIU:
-                
+                temp = RegFile[RS] + signExtension(immediate);
+                RegFile[RT] = temp;
                 break;
             case  OP_ANDI:
-                
+                RegFile[RT] = RegFile[RS] + signExtension(immediate);
                 break;
             case  OP_XORI:
                 
@@ -239,8 +248,10 @@ int main(int argc, char * argv[]) {
                 unsigned char SPECIAL = ((opcode)) & (0b00111111);
                 printf("FUNC = %s\n",byte_to_binary(SPECIAL));
                 // getting the last bits to compare in second switch statment
+
                 //Getting RD, shamt
                 unsigned char RD, shamt, temp, HIGH, LOW;
+
                 RD = ((CurrentInstruction) >> 11) & (0b00111111);
                 shamt = ((CurrentInstruction) >> 6) & (0b00111111);
                 
