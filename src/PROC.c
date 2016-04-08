@@ -179,25 +179,38 @@ int main(int argc, char * argv[]) {
         
         int64_t finalNumber, lowNumber, highNumber;
         switch(opcode) {
-            case OP_ADDI :
-
+                
+            //////////////////////////////////////////////////////////
+            // Immediate Mode Math and Bit Operators
+            //////////////////////////////////////////////////////////
+            
+            //Add Immediate (Signed)
+            case OP_ADDI:
                 RegFile[RT] = RegFile[RS] + immediate;
-                //not sure if its immediate or RegFile[immediate]
-                // This is using immediate since the data is stored in the current instruction not the register file
                 break;
+                
+            //Add Immediate (Unsigned)
             case OP_ADDIU:
                 temp = RegFile[RS] + signExtension(immediate);
                 RegFile[RT] = temp;
                 break;
+                
+            //Bit AND Immediate
             case OP_ANDI:
                 RegFile[RT] = RegFile[RS] + signExtension(immediate);
                 break;
+                
+            //Bit XOR Immediate
             case OP_XORI:
                 RegFile[RT] = RegFile[RS] ^ immediate;       
                 break;
+                
+            //Bit OR Immediate
             case OP_ORI:
                 RegFile[RT] = RegFile[RS] | immediate;
                 break;
+                
+                
             case OP_SLTI:
                 
                 if (RegFile[RS] < signExtension(immediate)) {
@@ -218,6 +231,11 @@ int main(int argc, char * argv[]) {
                 }
                 
                 break;
+                
+            //////////////////////////////////////////////////////////
+            // Branch Instructions
+            //////////////////////////////////////////////////////////
+                
             case OP_BEQ:
                 
                 //TODO: Figure out how to implement branch command
@@ -308,20 +326,28 @@ int main(int argc, char * argv[]) {
                 
                 switch(SPECIAL) {
                         
+                    //////////////////////////////////////////////////////////
+                    // Math Operators
+                    //////////////////////////////////////////////////////////
+                        
                     case FUNC_ADD:
                         //Todo: overflow behavior? SEE PROJECT DESCP(BB) -> WE DO NOT NEED TO DO THIS
                         RegFile[RD] = RegFile[RS] + RegFile[RT];
                         break;
+                        
                     case FUNC_ADDU:
                         RegFile[RD] = RegFile[RS] + RegFile[RT];
                         break;
+                        
                     case  FUNC_SUB:
                         //Todo: overflow behavior? SEE PROJECT DESCP(BB) -> WE DO NOT NEED TO DO THIS
                         RegFile[RD] = RegFile[RS] - RegFile[RT];
                         break;
+                        
                     case  FUNC_SUBU:
                         RegFile[RD] = RegFile[RS] - RegFile[RT];
                         break;
+                        
                     case FUNC_DIV: //if you div by 0, answer is UNPREDICTABLE!
                         lowNumber = RegFile[RS] / RegFile[RT]; // here
                         LOW = lowNumber;
@@ -329,6 +355,7 @@ int main(int argc, char * argv[]) {
                         highNumber = RegFile[RS] % RegFile[RT]; //here
                         HIGH = highNumber;
                         break;
+                        
                     case FUNC_DIVU:
                          lowNumber = RegFile[RS] / RegFile[RT]; //here
                         LOW = lowNumber;
@@ -336,71 +363,103 @@ int main(int argc, char * argv[]) {
                         highNumber = RegFile[RS] % RegFile[RT]; //here
                         HIGH = highNumber;
                         break;
+                        
                     case FUNC_MULT: //not sure if I did this correctly
                             //high = 0-31, of 64 bit number, 32-64 is low, see ->
                             finalNumber = RegFile[RS] * RegFile[RT]; //here
                             HIGH = ((finalNumber >> 31) & (0b00111111));
                             LOW = ((finalNumber << 31) & (0b00111111));
                         break;
+                        
                     case FUNC_MULTU: // same as above
                       //high = 0-31, of 64 bit number, 32-64 is low, see ->
                            finalNumber = (RegFile[RS] * RegFile[RT]); //here
                             HIGH = ((finalNumber >> 31) & (0b00111111));
                             LOW = ((finalNumber << 31) & (0b00111111));
                         break;
+                        
                     case FUNC_MFHI:
                         RegFile[RD] = HIGH;
                         break;
+                        
                     case FUNC_MFLO:
                         RegFile[RD] = LOW;
                         break;
+                        
                     case  FUNC_SLT:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
+                        
                     case FUNC_MTHI: // a div, mult, or something with high low must be used
                                      // before this command
                         HIGH = RegFile[RS];
                         break;
+                        
                     case FUNC_MTLO:
                         LOW = RegFile[RS];
                         break;
+                        
+                        
+                    //////////////////////////////////////////////////////////
+                    // Bit Logic Operators
+                    //////////////////////////////////////////////////////////
+                    
+                    //AND
                     case FUNC_AND:
-                    RegFile[RD] = RegFile[RS] & RegFile[RT];  // and
+                    RegFile[RD] = RegFile[RS] & RegFile[RT];
                         break;
+                        
+                    //XOR
                     case FUNC_XOR:
-                    RegFile[RD] = RegFile[RS] ^ RegFile[RT];//xor
+                    RegFile[RD] = RegFile[RS] ^ RegFile[RT];
                         break;
+                    
+                    //NOR
                     case FUNC_NOR:
-                    RegFile[RD] = ~(RegFile[RS]| RegFile[RT]);//NOR
+                    RegFile[RD] = ~(RegFile[RS]| RegFile[RT]);
                         break;
+                    
+                    //OR
                     case FUNC_OR:
-                    RegFile[RD] = RegFile[RS] | RegFile[RT];//or
+                    RegFile[RD] = RegFile[RS] | RegFile[RT];
                         break;
+                        
+                    //SLL (Shift Left Logical)
                     case FUNC_SLL:
                     RegFile[RD] = RegFile[RT] << RegFile[shamt];//SLL
                         break;
+                        
                     case FUNC_SLLV:
                     RegFile[RD] = RegFile[RT] << RegFile[RS];//sllv
                         break;
+                        
                     case FUNC_SLTU:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
+                        
                     case FUNC_SRA:
                         RegFile[RD] = RegFile[RT] + RegFile[shamt];
                         break;
+                        
                     case FUNC_SRAV:
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
+                        
+                    //SRL (Shift Right Logical)
                     case FUNC_SRL:
                         RegFile[RD] = RegFile[RT] >> RegFile[shamt];
                         break;
+                        
                     case FUNC_SRLV:
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
+                        
                     case FUNC_JALR:
                         break;
+                        
                     case FUNC_JR:
                         break;
+                        
                     default:
                         printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
                 }
