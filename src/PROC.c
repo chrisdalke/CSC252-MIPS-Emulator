@@ -7,7 +7,7 @@
 #include "Syscall.h"
 #include "utils/heap.h"
 #include "elf_reader/elf_reader.h"
-#include "instructionConstants.h"
+//#include "instructionConstants.h"
 #include <stdint.h> // put in here for 64 bit number
 
 //////////////////////////////////////////////////////////
@@ -189,20 +189,20 @@ int main(int argc, char * argv[]) {
                 //not sure if its immediate or RegFile[immediate]
                 // This is using immediate since the data is stored in the current instruction not the register file
                 break;
-            case  OP_ADDIU:
+            case OP_ADDIU:
                 temp = RegFile[RS] + signExtension(immediate);
                 RegFile[RT] = temp;
                 break;
-            case  OP_ANDI:
+            case OP_ANDI:
                 RegFile[RT] = RegFile[RS] + signExtension(immediate);
                 break;
-            case  OP_XORI:
+            case OP_XORI:
                 RegFile[RT] = RegFile[RS] ^ immediate;       
                 break;
-            case  OP_ORI:
+            case OP_ORI:
                 RegFile[RT] = RegFile[RS] | immediate;
                 break;
-            case  OP_SLTI:
+            case OP_SLTI:
                 
                 if (RegFile[RS] < signExtension(immediate)) {
                     RegFile[RS] = 1;
@@ -211,7 +211,7 @@ int main(int argc, char * argv[]) {
                 }
                 
                 break;
-            case  OP_SLTIU:
+            case OP_SLTIU:
                 
                 //This implementation taken from the mips handbook
                 //Check to make sure this actually works properly
@@ -222,22 +222,22 @@ int main(int argc, char * argv[]) {
                 }
                 
                 break;
-            case  OP_BEQ:
+            case OP_BEQ:
                 
                 //TODO: Figure out how to implement branch command
                 
                 break;
-            case  OP_BEQL:
+            case OP_BEQL:
                 break;
-            case  OP_BGTZ:
+            case OP_BGTZ:
                 break;
-            case  OP_BLEZ:
+            case OP_BLEZ:
                 break;
-            case  OP_BLEZL:
+            case OP_BLEZL:
                 break;
             case  OP_BNE:
                 break;
-            case  OP_BNEL:
+            case OP_BNEL:
                 break;
             case  OP_J:
                 
@@ -254,49 +254,49 @@ int main(int argc, char * argv[]) {
                 RegFile[31] = PC;
                 
                 break;
-            case  OP_LB:
+            case OP_LB:
                 break;
-            case  OP_LBU:
+            case OP_LBU:
                 break;
-            case  OP_LH:
+            case OP_LH:
                 break;
-            case  OP_LHU:
+            case OP_LHU:
                 break;
-            case  OP_LUI:
+            case OP_LUI:
                 break;
-            case  OP_LW:
+            case OP_LW:
                 
                 //load the word given by the address into the specified register
                 RegFile[RT] = readWord(RS + immediate,false);
                 
                 break;
-            case  OP_LWL:
+            case OP_LWL:
                 
                 //Loads the most-significant part of a word as a signed value from an unaligned memory address
                 //TODO
                 
                 break;
-            case  OP_LWR:
+            case OP_LWR:
                 
                 //Loads the least-significant part of a word as a signed value from an unaligned memory address
                 //TODO
                 
                 break;
-            case  OP_SB:
+            case OP_SB:
                 break;
-            case  OP_SH:
+            case OP_SH:
                 break;
-            case  OP_SW:
+            case OP_SW:
                 
                 //Stores a word into the specified memory location
                 writeWord(RS + immediate,RegFile[RT],false);
                 
                 break;
-            case  OP_SWL:
+            case OP_SWL:
                 break;
-            case  OP_SWR:
+            case OP_SWR:
                 break;
-            case  OP_SPECIAL:
+            case OP_SPECIAL:
                 
                 //SPECIAL CASE OPCODE = 0
                 //TO CHNAGE NEED TO CHANGE THE DO BITWISE TO GET THE BITS TO COMPARE
@@ -331,51 +331,51 @@ int main(int argc, char * argv[]) {
                         int64_t highNumber = RegFile[RS] % RegFile[RT];
                         HIGH = highNumber;
                         break;
-                    case  FUNC_DIVU:
+                    case FUNC_DIVU:
                         int64_t lowNumber = RegFile[RS] / RegFile[RT];
                         LOW = lowNumber;
 
                         int64_t highNumber = RegFile[RS] % RegFile[RT];
                         HIGH = highNumber;
                         break;
-                    case  FUNC_MULT: //not sure if I did this correctly
+                    case FUNC_MULT: //not sure if I did this correctly
                             //high = 0-31, of 64 bit number, 32-64 is low, see ->
                             int64_t finalNumber = RegFile[RS] * RegFile[RT];
                             HIGH = ((finalNumber >> 31) & (0b00111111));
                             LOW = ((finalNumber << 31) & (0b00111111));
                         break;
-                    case  FUNC_MULTU: // same as above
+                    case FUNC_MULTU: // same as above
                       //high = 0-31, of 64 bit number, 32-64 is low, see ->
                             int64_t finalNumber = (RegFile[RS] * RegFile[RT]);
                             HIGH = ((finalNumber >> 31) & (0b00111111));
                             LOW = ((finalNumber << 31) & (0b00111111));
                         break;
-                    case  FUNC_MFHI:
+                    case FUNC_MFHI:
                         RegFile[RD] = HIGH;
                         break;
-                    case  FUNC_MFLO:
+                    case FUNC_MFLO:
                         Regfile[RD] = LOW;
                         break;
                     case  FUNC_SLT:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT])
                         break;
-                    case  FUNC_MTHI: // a div, mult, or something with high low must be used
+                    case FUNC_MTHI: // a div, mult, or something with high low must be used
                                      // before this command
                         HIGH = RegFile[RS];
                         break;
-                    case  FUNC_MTLO:
+                    case FUNC_MTLO:
                         LOW = RegFile[RS];
                         break;
-                    case  FUNC_AND:
+                    case FUNC_AND:
                     RegFile[RD] = RegFile[RS] & RegFile[RT];  // and
                         break;
-                    case  FUNC_XOR:
+                    case FUNC_XOR:
                     RegFile[RD] = RegFile[RS] ^ RegFile[RT]//xor
                         break;
-                    case  FUNC_NOR:
+                    case FUNC_NOR:
                     RegFile[RD] = RegFile[RS] ~ RegFile[RT]//NOR
                         break;
-                    case  FUNC_OR:
+                    case FUNC_OR:
                     RegFile[RD] = RegFile[RS] | RegFile[RT]//or
                         break;
                     case FUNC_SLL
@@ -384,24 +384,24 @@ int main(int argc, char * argv[]) {
                     case FUNC_SLLV
                     RegFile[RD] = RegFile[RT] << RegFile[RS]//sllv
                         break;
-                    case  FUNC_SLTU:
+                    case FUNC_SLTU:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
-                    case  FUNC_SRA:
+                    case FUNC_SRA:
                         RegFile[RD] = RegFile[RT] + RegFile[shamt];
                         break;
                     case FUNC_SRAV:
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
-                    case  FUNC_SRL:
+                    case FUNC_SRL:
                         RegFile[RD] = RegFile[RT] >> RegFile[shamt];
                         break;
-                    case  FUNC_SRLV:
+                    case FUNC_SRLV:
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
-                    case  FUNC_JALR:
+                    case FUNC_JALR:
                         break;
-                    case  FUNC_JR:
+                    case FUNC_JR:
                         break;
                     case FUNC_NOP:
                         //Do nothing
@@ -411,7 +411,7 @@ int main(int argc, char * argv[]) {
                 }
                 
                 break;
-            case  OP_REGIMM:
+            case OP_REGIMM:
                 break;
             default:
                 printf("THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
