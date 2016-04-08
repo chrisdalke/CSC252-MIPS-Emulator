@@ -120,11 +120,13 @@ const char *byte_to_binary(int x)
 }
 
 int main(int argc, char * argv[]) {
+
+
     
     int MaxInst = 0;
     int status = 0;
     uint32_t i;
-    uint32_t PC,newPC;
+    uint32_t PC,newPC, HIGH, LOW;
     uint32_t CurrentInstruction;
     
     if (argc < 2) {
@@ -169,7 +171,7 @@ int main(int argc, char * argv[]) {
         printf("Current opcode =  %s\n",byte_to_binary(opcode));
         
         //Preload some variables that will be used for many commands
-        unsigned char RS, RT, RD, shamt, temp, HIGH, LOW, immediate;
+        unsigned char RS, RT, RD, shamt, temp, immediate; // this might be a prob cuz of for loop
         RS = ((CurrentInstruction) >> 21) & (0b00111111);
         RT = ((CurrentInstruction) >> 16) & (0b00111111);
         immediate = ((CurrentInstruction)) & (0b1111111111111111);
