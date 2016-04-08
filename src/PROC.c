@@ -1,6 +1,7 @@
 
 #include <inttypes.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include "RegFile.h"
@@ -215,7 +216,7 @@ int main(int argc, char * argv[]) {
                 
                 //This implementation taken from the mips handbook
                 //Check to make sure this actually works properly
-                if (0 || RegFile[RS]) < (0 || signExtension(immediate)) {
+                if ((0 || RegFile[RS]) < (0 || signExtension(immediate))) {
                     RegFile[RS] = 1;
                 } else {
                     RegFile[RS] = 0;
