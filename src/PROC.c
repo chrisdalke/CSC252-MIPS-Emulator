@@ -356,7 +356,7 @@ int main(int argc, char * argv[]) {
                         RegFile[RD] = HIGH;
                         break;
                     case FUNC_MFLO:
-                        Regfile[RD] = LOW;
+                        RegFile[RD] = LOW;
                         break;
                     case  FUNC_SLT:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
@@ -372,19 +372,19 @@ int main(int argc, char * argv[]) {
                     RegFile[RD] = RegFile[RS] & RegFile[RT];  // and
                         break;
                     case FUNC_XOR:
-                    RegFile[RD] = RegFile[RS] ^ RegFile[RT]//xor
+                    RegFile[RD] = RegFile[RS] ^ RegFile[RT];//xor
                         break;
                     case FUNC_NOR:
-                    RegFile[RD] = RegFile[RS] ~ RegFile[RT]//NOR
+                    RegFile[RD] = ~(RegFile[RS]| RegFile[RT]);//NOR
                         break;
                     case FUNC_OR:
-                    RegFile[RD] = RegFile[RS] | RegFile[RT]//or
+                    RegFile[RD] = RegFile[RS] | RegFile[RT];//or
                         break;
-                    case FUNC_SLL
-                    RegFile[RD] = RegFile[RT] << RegFile[SA]//SLL
+                    case FUNC_SLL:
+                    RegFile[RD] = RegFile[RT] << RegFile[shamt];//SLL
                         break;
-                    case FUNC_SLLV
-                    RegFile[RD] = RegFile[RT] << RegFile[RS]//sllv
+                    case FUNC_SLLV:
+                    RegFile[RD] = RegFile[RT] << RegFile[RS];//sllv
                         break;
                     case FUNC_SLTU:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
