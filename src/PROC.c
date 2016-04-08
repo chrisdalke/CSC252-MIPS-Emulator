@@ -53,7 +53,7 @@
 
 #define FUNC_ADD    0b00100000
 #define FUNC_ADDU   0b00000001
-#define FUNC_SUB    0b00000010
+#define FUNC_SUB    0b00000010 // command is the same as below!
 #define FUNC_SUBU   0b00000011
 #define FUNC_DIV    0b00011010
 #define FUNC_DIVU   0b00011011
@@ -73,7 +73,7 @@
 #define FUNC_SLTU   0b00101011
 #define FUNC_SRA    0b00000011
 #define FUNC_SRAV   0b00000111
-#define FUNC_SRL    0b00000010
+#define FUNC_SRL    0b00000010 //commnad is the same!
 #define FUNC_SRLV   0b00000110
 #define FUNC_JALR   0b00001001
 #define FUNC_JR     0b00001000
