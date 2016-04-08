@@ -189,7 +189,7 @@ int main(int argc, char * argv[]) {
                 //not sure if its immediate or RegFile[immediate]
                 // This is using immediate since the data is stored in the current instruction not the register file
                 break;
-            case OP_ADDIU:
+            case OP_ADDIU :
                 temp = RegFile[RS] + signExtension(immediate);
                 RegFile[RT] = temp;
                 break;
