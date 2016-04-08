@@ -177,6 +177,9 @@ int main(int argc, char * argv[]) {
         immediate = ((CurrentInstruction)) & (0b1111111111111111);
         
         
+        //get the sign-extended version of the immediate variable.
+        int immediateExtended = signExtension(immediate);
+        
         int64_t finalNumber, lowNumber, highNumber;
         switch(opcode) {
                 
@@ -210,7 +213,6 @@ int main(int argc, char * argv[]) {
                 RegFile[RT] = RegFile[RS] | immediate;
                 break;
                 
-                
             case OP_SLTI:
                 
                 if (RegFile[RS] < signExtension(immediate)) {
@@ -237,39 +239,71 @@ int main(int argc, char * argv[]) {
             //////////////////////////////////////////////////////////
                 
             case OP_BEQ:
-                
-                //TODO: Figure out how to implement branch command
+                if (RegFile[RS] == RegFile[RT]){
+                    newPC = PC + immediateExtended;
+                    branchDelayStatus = 1; //starts branch
+                }
                 
                 break;
             case OP_BEQL:
+                
+                //Figure out what this is
+                
                 break;
             case OP_BGTZ:
+                
+                if (RegFile[RS] > 0){
+                    newPC = PC + immediateExtended;
+                    branchDelayStatus = 1; //starts branch
+                }
+                
+                
                 break;
             case OP_BLEZ:
+                
+                
+                if (RegFile[RS] <= 0){
+                    newPC = PC + immediateExtended;
+                    branchDelayStatus = 1; //starts branch
+                }
+                
                 break;
             case OP_BLEZL:
+                //Figure out what this is
                 break;
             case  OP_BNE:
+                
+                if (RegFile[RS] != RegFile[RT]){
+                    newPC = PC + immediateExtended;
+                    branchDelayStatus = 1; //starts branch
+                }
                 break;
             case OP_BNEL:
+                
+                //Figure out what this is
+                
                 break;
             case  OP_J:
                 
-                //Update newPC, our target program counter
-                newPC = PC + immediate;
+                newPC = PC + immediateExtended; //update branch target
                 branchDelayStatus = 1; //starts branch
                 
                 break;
             case  OP_JAL:
                 
-                //Update newPC, our target program counter
-                newPC = PC + immediate;
+                newPC = PC + immediateExtended; //update branch target
                 branchDelayStatus = 1; //starts branch
                 
                 //record the return address into RegFile[31]
                 RegFile[31] = PC + 8;
                 
                 break;
+                
+            //////////////////////////////////////////////////////////
+            // Memory Instructions
+            //////////////////////////////////////////////////////////
+                
+                
             case OP_LB:
                 break;
             case OP_LBU:
@@ -312,6 +346,12 @@ int main(int argc, char * argv[]) {
                 break;
             case OP_SWR:
                 break;
+                
+                
+            //////////////////////////////////////////////////////////
+            // R-Type Instructions
+            //////////////////////////////////////////////////////////
+                
             case OP_SPECIAL:
                 
                 //SPECIAL CASE OPCODE = 0
