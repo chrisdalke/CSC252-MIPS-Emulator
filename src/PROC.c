@@ -95,7 +95,7 @@ void write_initialization_vector(uint32_t sp, uint32_t gp, uint32_t start) {
     printRegFile();
     
 }
-//THIS IS USED for some of the addi methods
+//THIS IS USED for some of the addi methods -> taken from get hub
 int signExtension(int instr) {
     int value = (0x0000FFFF & instr);
     int mask = 0x00008000;
@@ -197,7 +197,7 @@ int main(int argc, char * argv[]) {
                 RegFile[RT] = RegFile[RS] + signExtension(immediate);
                 break;
             case  OP_XORI:
-                RegFile[RT] = RegFile[RS] ^ immediate;
+                RegFile[RT] = RegFile[RS] ^ immediate;       
                 break;
             case  OP_ORI:
                 RegFile[RT] = RegFile[RS] | immediate;
@@ -246,7 +246,6 @@ int main(int argc, char * argv[]) {
                 
                 break;
             case  OP_JAL:
-                
                 
                 //Update newPC, our target program counter
                 newPC = PC + immediate;
