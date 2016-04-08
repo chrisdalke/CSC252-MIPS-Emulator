@@ -16,67 +16,67 @@
 
 //Opcode Values
 
-#define  OP_SPECIAL 0b00000000;
-#define  OP_REGIMM  0b00000001;
-#define  OP_ADDI    0b00001000;
-#define  OP_ADDIU   0b00001001;
-#define  OP_ANDI    0b00001100;
-#define  OP_XORI    0b00001110;
-#define  OP_ORI     0b00001101;
-#define  OP_SLTI    0b00001010;
-#define  OP_SLTIU   0b00001011;
-#define  OP_BEQ     0b00000100;
-#define  OP_BEQL    0b00010100;
-#define  OP_BGTZ    0b00000111;
-#define  OP_BLEZ    0b00000110;
-#define  OP_BLEZL   0b00010110;
-#define  OP_BNE     0b00000101;
-#define  OP_BNEL    0b00010101;
-#define  OP_J       0b00000010;
-#define  OP_JAL     0b00000011;
-#define  OP_LB      0b00100000;
-#define  OP_LBU     0b00100100;
-#define  OP_LH      0b00100001;
-#define  OP_LHU     0b00100101;
-#define  OP_LUI     0b00001111;
-#define  OP_LW      0b00100011;
-#define  OP_LWL     0b00100010;
-#define  OP_LWR     0b00100110;
-#define  OP_SB      0b00101000;
-#define  OP_SH      0b00101001;
-#define  OP_SW      0b00101011;
-#define  OP_SWL     0b00101010;
-#define  OP_SWR     0b00101110;
+#define  OP_SPECIAL 0b00000000
+#define  OP_REGIMM  0b00000001
+#define  OP_ADDI    0b00001000
+#define  OP_ADDIU   0b00001001
+#define  OP_ANDI    0b00001100
+#define  OP_XORI    0b00001110
+#define  OP_ORI     0b00001101
+#define  OP_SLTI    0b00001010
+#define  OP_SLTIU   0b00001011
+#define  OP_BEQ     0b00000100
+#define  OP_BEQL    0b00010100
+#define  OP_BGTZ    0b00000111
+#define  OP_BLEZ    0b00000110
+#define  OP_BLEZL   0b00010110
+#define  OP_BNE     0b00000101
+#define  OP_BNEL    0b00010101
+#define  OP_J       0b00000010
+#define  OP_JAL     0b00000011
+#define  OP_LB      0b00100000
+#define  OP_LBU     0b00100100
+#define  OP_LH      0b00100001
+#define  OP_LHU     0b00100101
+#define  OP_LUI     0b00001111
+#define  OP_LW      0b00100011
+#define  OP_LWL     0b00100010
+#define  OP_LWR     0b00100110
+#define  OP_SB      0b00101000
+#define  OP_SH      0b00101001
+#define  OP_SW      0b00101011
+#define  OP_SWL     0b00101010
+#define  OP_SWR     0b00101110
 
 //Func Values
 
-#define FUNC_ADD    0b00100000;
-#define FUNC_ADDU   0b00000001;
-#define FUNC_SUB    0b00000010;
-#define FUNC_SUBU   0b00000011;
-#define FUNC_DIV    0b00011010;
-#define FUNC_DIVU   0b00011011;
-#define FUNC_MULT   0b00011000;
-#define FUNC_MULTU  0b00011000;
-#define FUNC_MFHI   0b00010000;
-#define FUNC_MFLO   0b00010010;
-#define FUNC_MTHI   0b00010001;
-#define FUNC_MTLO   0b00010011;
-#define FUNC_AND    0b00100100;
-#define FUNC_XOR    0b00100110;
-#define FUNC_NOR    0b00100110;
-#define FUNC_OR     0b00100101;
-#define FUNC_SLL    0b00000000;
-#define FUNC_SLLV   0b00000100;
-#define FUNC_SLT    0b00101010;
-#define FUNC_SLTU   0b00101011;
-#define FUNC_SRA    0b00000011;
-#define FUNC_SRAV   0b00000111;
-#define FUNC_SRL    0b00000010;
-#define FUNC_SRLV   0b00000110;
-#define FUNC_JALR   0b00001001;
-#define FUNC_JR     0b00001000;
-#define FUNC_NOP    0b00000000;
+#define FUNC_ADD    0b00100000
+#define FUNC_ADDU   0b00000001
+#define FUNC_SUB    0b00000010
+#define FUNC_SUBU   0b00000011
+#define FUNC_DIV    0b00011010
+#define FUNC_DIVU   0b00011011
+#define FUNC_MULT   0b00011000
+#define FUNC_MULTU  0b00011000
+#define FUNC_MFHI   0b00010000
+#define FUNC_MFLO   0b00010010
+#define FUNC_MTHI   0b00010001
+#define FUNC_MTLO   0b00010011
+#define FUNC_AND    0b00100100
+#define FUNC_XOR    0b00100110
+#define FUNC_NOR    0b00100110
+#define FUNC_OR     0b00100101
+#define FUNC_SLL    0b00000000
+#define FUNC_SLLV   0b00000100
+#define FUNC_SLT    0b00101010
+#define FUNC_SLTU   0b00101011
+#define FUNC_SRA    0b00000011
+#define FUNC_SRAV   0b00000111
+#define FUNC_SRL    0b00000010
+#define FUNC_SRLV   0b00000110
+#define FUNC_JALR   0b00001001
+#define FUNC_JR     0b00001000
+#define FUNC_NOP    0b00000000
 
 //////////////////////////////////////////////////////////
 // End of File
@@ -184,12 +184,12 @@ int main(int argc, char * argv[]) {
         }
         
         switch(opcode) {
-            case OP_ADDI:
+            case OP_ADDI :
                 RegFile[RT] = RegFile[RS] + immediate;
                 //not sure if its immediate or RegFile[immediate]
                 // This is using immediate since the data is stored in the current instruction not the register file
                 break;
-            case OP_ADDIU :
+            case OP_ADDIU:
                 temp = RegFile[RS] + signExtension(immediate);
                 RegFile[RT] = temp;
                 break;
