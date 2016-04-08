@@ -184,7 +184,7 @@ int main(int argc, char * argv[]) {
         }
         
         switch(opcode) {
-            case  OP_ADDI:
+            case OP_ADDI:
                 RegFile[RT] = RegFile[RS] + immediate;
                 //not sure if its immediate or RegFile[immediate]
                 // This is using immediate since the data is stored in the current instruction not the register file
