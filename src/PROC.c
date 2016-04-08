@@ -8,7 +8,6 @@
 #include "Syscall.h"
 #include "utils/heap.h"
 #include "elf_reader/elf_reader.h"
-//#include "instructionConstants.h"
 #include <stdint.h> // put in here for 64 bit number
 
 //////////////////////////////////////////////////////////
@@ -77,7 +76,6 @@
 #define FUNC_SRLV   0b00000110
 #define FUNC_JALR   0b00001001
 #define FUNC_JR     0b00001000
-//#define FUNC_NOP    0b00000000 //issue here with nop and SLL being the same
 
 //////////////////////////////////////////////////////////
 // End of File
@@ -96,7 +94,7 @@ void write_initialization_vector(uint32_t sp, uint32_t gp, uint32_t start) {
     printRegFile();
     
 }
-//THIS IS USED for some of the addi methods -> taken from get hub
+//THIS IS USED for some of the addi methods -> taken from github
 int signExtension(int instr) {
     int value = (0x0000FFFF & instr);
     int mask = 0x00008000;
@@ -405,18 +403,15 @@ int main(int argc, char * argv[]) {
                         break;
                     case FUNC_JR:
                         break;
-                    //case FUNC_NOP: // took this out till nop problem soloved see #define cases
-                        //Do nothing
-                        //break;
                     default:
-                        printf("THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
+                        printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
                 }
                 
                 break;
             case OP_REGIMM:
                 break;
             default:
-                printf("THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
+                printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
                 break;
         }
         
