@@ -239,19 +239,17 @@ int main(int argc, char * argv[]) {
                 
                 //Update newPC, our target program counter
                 newPC = PC + immediate;
-                
-                //EXAMPLE CODE OF TRIGGERING BRANCH
-                //branchDelayStatus = 1; //starts branch
-                //newPC = new program position;
+                branchDelayStatus = 1; //starts branch
                 
                 break;
             case  OP_JAL:
                 
                 //Update newPC, our target program counter
                 newPC = PC + immediate;
+                branchDelayStatus = 1; //starts branch
                 
-                //record the current address into RegFile[31]
-                RegFile[31] = PC;
+                //record the return address into RegFile[31]
+                RegFile[31] = PC + 8;
                 
                 break;
             case OP_LB:
@@ -417,7 +415,7 @@ int main(int argc, char * argv[]) {
         
         
         //After we are done, increase the program counter.
-        PC = PC + 1;
+        PC = PC + 4;
         
         //Handle branch delay slot if there is a branch command executing
         if (branchDelayStatus == 1){
