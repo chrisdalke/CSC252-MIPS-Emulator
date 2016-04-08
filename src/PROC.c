@@ -129,6 +129,8 @@ int main(int argc, char * argv[]) {
     uint32_t PC,newPC, HIGH, LOW;
     uint32_t CurrentInstruction;
     
+    int branchDelayStatus = 0;
+    
     if (argc < 2) {
         printf("Input argument missing \n");
         return -1;
@@ -151,8 +153,6 @@ int main(int argc, char * argv[]) {
     printf("\n ----- Execute Program ----- \n");
     printf("Max Instruction to run = %d \n",MaxInst);
     PC = exec.GPC_START;
-    
-    newPC = -1;
     
     for(i=0; i<MaxInst ; i++) {
         DynInstCount++;
@@ -177,12 +177,6 @@ int main(int argc, char * argv[]) {
         immediate = ((CurrentInstruction)) & (0b1111111111111111);
         
         
-        //Handle branch delay slot
-        if (newPC != -1){
-            //We should jump ahead to the next instruction
-            PC = newPC;
-            newPC = -1;
-        }
         int64_t finalNumber, lowNumber, highNumber;
         switch(opcode) {
             case OP_ADDI :
@@ -245,6 +239,10 @@ int main(int argc, char * argv[]) {
                 
                 //Update newPC, our target program counter
                 newPC = PC + immediate;
+                
+                //EXAMPLE CODE OF TRIGGERING BRANCH
+                //branchDelayStatus = 1; //starts branch
+                //newPC = new program position;
                 
                 break;
             case  OP_JAL:
@@ -417,8 +415,18 @@ int main(int argc, char * argv[]) {
                 break;
         }
         
+        
         //After we are done, increase the program counter.
         PC = PC + 1;
+        
+        //Handle branch delay slot if there is a branch command executing
+        if (branchDelayStatus == 1){
+            branchDelayStatus = 2;
+        } else if (branchDelayStatus == 2){
+            PC = newPC;
+            branchDelayStatus = 0;
+        }
+        
         
         //////////////////////////////////////////////////////////
         // End of Main Instruction Simulation
