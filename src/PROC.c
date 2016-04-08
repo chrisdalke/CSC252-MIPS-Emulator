@@ -183,9 +183,10 @@ int main(int argc, char * argv[]) {
             PC = newPC;
             newPC = -1;
         }
-        
+        int64_t finalNumber, lowNumber, highNumber;
         switch(opcode) {
             case OP_ADDI :
+
                 RegFile[RT] = RegFile[RS] + immediate;
                 //not sure if its immediate or RegFile[immediate]
                 // This is using immediate since the data is stored in the current instruction not the register file
@@ -326,28 +327,28 @@ int main(int argc, char * argv[]) {
                         RegFile[RD] = RegFile[RS] - RegFile[RT];
                         break;
                     case FUNC_DIV: //if you div by 0, answer is UNPREDICTABLE!
-                        int64_t lowNumber = RegFile[RS] / RegFile[RT];
+                        lowNumber = RegFile[RS] / RegFile[RT]; // here
                         LOW = lowNumber;
 
-                        int64_t highNumber = RegFile[RS] % RegFile[RT];
+                        highNumber = RegFile[RS] % RegFile[RT]; //here
                         HIGH = highNumber;
                         break;
                     case FUNC_DIVU:
-                        int64_t lowNumber = RegFile[RS] / RegFile[RT];
+                         lowNumber = RegFile[RS] / RegFile[RT]; //here
                         LOW = lowNumber;
 
-                        int64_t highNumber = RegFile[RS] % RegFile[RT];
+                        highNumber = RegFile[RS] % RegFile[RT]; //here
                         HIGH = highNumber;
                         break;
                     case FUNC_MULT: //not sure if I did this correctly
                             //high = 0-31, of 64 bit number, 32-64 is low, see ->
-                            int64_t finalNumber = RegFile[RS] * RegFile[RT];
+                            finalNumber = RegFile[RS] * RegFile[RT]; //here
                             HIGH = ((finalNumber >> 31) & (0b00111111));
                             LOW = ((finalNumber << 31) & (0b00111111));
                         break;
                     case FUNC_MULTU: // same as above
                       //high = 0-31, of 64 bit number, 32-64 is low, see ->
-                            int64_t finalNumber = (RegFile[RS] * RegFile[RT]);
+                           finalNumber = (RegFile[RS] * RegFile[RT]); //here
                             HIGH = ((finalNumber >> 31) & (0b00111111));
                             LOW = ((finalNumber << 31) & (0b00111111));
                         break;
@@ -358,7 +359,7 @@ int main(int argc, char * argv[]) {
                         Regfile[RD] = LOW;
                         break;
                     case  FUNC_SLT:
-                        RegFile[RD] = (RegFile[RS] < RegFile[RT])
+                        RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
                     case FUNC_MTHI: // a div, mult, or something with high low must be used
                                      // before this command
