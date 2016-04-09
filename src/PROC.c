@@ -136,8 +136,11 @@ int main(int argc, char * argv[]) {
     int MaxInst = 0;
     int status = 0;
     uint32_t i;
-    uint32_t PC,newPC, HIGH, LOW;
+    uint32_t PC,newPC,
     uint32_t CurrentInstruction;
+    
+    //High and Low registers
+    uint32_t HIGH,LOW;
     
     int branchDelayStatus = 0;
     
@@ -177,27 +180,23 @@ int main(int argc, char * argv[]) {
         //shift the current instruction 26 to the right to get the first 6 bits (OPCODE)
         unsigned char opcode = ((CurrentInstruction) >> 26) & (0b00111111);
         
-        //printf("Current PC = %d\n",PC);
-        //printf("read instruction %d: %i\n",i,CurrentInstruction);
+        // ----------------------------------------------------
+        //Preload any variables that we might potentially need
         
-        //Test: print the opcode for the current instruction.
-        //printf("Current opcode =  %s\n",byte_to_binary(opcode));
-        
-        //Preload some variables that will be used for many commands
-        uint32_t RS, RT, RD, shamt, temp, immediate, OFFSET, BASE; // this might be a prob cuz of for loop
-        uint32_t SPECIAL;
-        RS = ((CurrentInstruction) >> 21) & (0b0011111);
-        RT = ((CurrentInstruction) >> 16) & (0b0011111);
-        immediate = ((CurrentInstruction)) & (0b1111111111111111);
-        
-        OFFSET = ((CurrentInstruction) & (0b111111111111111));
-        BASE = (((CurrentInstruction) >> 21) & (0b1111));
+        uint32_t RS = ((CurrentInstruction) >> 21) & (0b0011111);
+        uint32_t RT = ((CurrentInstruction) >> 16) & (0b0011111);
+        uint32_t RD = ((CurrentInstruction) >> 11) & (0b11111);
+        uint32_t shamt = ((CurrentInstruction) >> 5) & (0b0011111);
+        uint32_t OFFSET = ((CurrentInstruction) & (0b111111111111111));
+        uint32_t BASE = (((CurrentInstruction) >> 21) & (0b1111));
+        uint32_t SPECIAL = ((CurrentInstruction)) & (0b00111111);
+        uint32_t immediate = ((CurrentInstruction)) & (0b1111111111111111);
+        uint32_t immediateExtended = signExtension(immediate);
 
-        
-        //get the sign-extended version of the immediate variable.
-        int immediateExtended = signExtension(immediate);
-
+        //Double-size word variables
         int64_t finalNumber, lowNumber, highNumber;
+        // ----------------------------------------------------
+        
         printf("%d\n",opcode );
         switch(opcode) {
                 
@@ -218,7 +217,7 @@ int main(int argc, char * argv[]) {
             case OP_ADDIU:
             {
                 printf("addiu\n");
-                temp = RegFile[RS] + signExtension(immediate);
+                uint32_t temp = RegFile[RS] + signExtension(immediate);
                 RegFile[RT] = temp;
                 break;
             }
@@ -461,17 +460,6 @@ int main(int argc, char * argv[]) {
             //////////////////////////////////////////////////////////
                 
             case OP_SPECIAL:
-                
-                //SPECIAL CASE OPCODE = 0
-                //TO CHNAGE NEED TO CHANGE THE DO BITWISE TO GET THE BITS TO COMPARE
-              
-                 SPECIAL = ((CurrentInstruction)) & (0b00111111);
-                
-                // getting the last bits to compare in second switch statment
-
-                RD = ((CurrentInstruction) >> 11) & (0b11111);
-                shamt = ((CurrentInstruction) >> 5) & (0b0011111);
-                
                 switch(SPECIAL) {
                         
                     //////////////////////////////////////////////////////////
