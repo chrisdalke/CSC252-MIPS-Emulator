@@ -428,7 +428,7 @@ int main(int argc, char * argv[]) {
                 
             //Store Word Left
             case OP_SWL:
-            RegFile[RT] =  readWord(OFFSET+BASE, false) =;//memory[base+offset] ← rt
+            RegFile[RT] =  readWord(OFFSET+BASE, false);//memory[base+offset] ← rt
            
                 break;
                 
