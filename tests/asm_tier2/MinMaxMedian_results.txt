@@ -1,1 +1,0 @@
-Should store three values in memory: min is the minimum (6), max is the maximum (92), median is the median (somewhere in between).

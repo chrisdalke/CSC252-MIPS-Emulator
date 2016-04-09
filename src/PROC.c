@@ -192,6 +192,9 @@ int main(int argc, char * argv[]) {
         uint32_t SPECIAL = ((CurrentInstruction)) & (0b00111111);
         uint32_t immediate = ((CurrentInstruction)) & (0b1111111111111111);
         uint32_t immediateExtended = signExtension(immediate);
+        
+        //Also store immediate as a signed integer
+        int immediateSigned = ((CurrentInstruction)) & (0b1111111111111111);
 
         //Double-size word variables
         int64_t finalNumber, lowNumber, highNumber;
@@ -208,8 +211,9 @@ int main(int argc, char * argv[]) {
             case OP_ADDI:
             {
                 printf("addi\n");
-                RegFile[RT] = RegFile[RS] + immediate;
-                printf("%i + %i = %i:\n",RegFile[RS],immediate,RegFile[RT]);
+                //Convert into t
+                RegFile[RT] = RegFile[RS] + immediateSigned;
+                printf("%i + %i = %i:\n",RegFile[RS],immediateSigned,RegFile[RT]);
                 break;
             }
                 
@@ -217,7 +221,7 @@ int main(int argc, char * argv[]) {
             case OP_ADDIU:
             {
                 printf("addiu\n");
-                uint32_t temp = RegFile[RS] + signExtension(immediate);
+                uint32_t temp = RegFile[RS] + immediateExtended;
                 RegFile[RT] = temp;
                 break;
             }
@@ -226,7 +230,7 @@ int main(int argc, char * argv[]) {
             case OP_ANDI:
             {
                 printf("andi\n");
-                RegFile[RT] = RegFile[RS] + signExtension(immediate);
+                RegFile[RT] = RegFile[RS] + immediateExtended;
                 break;
             }
                 
@@ -250,7 +254,7 @@ int main(int argc, char * argv[]) {
             case OP_SLTI:
             {
                 printf("slti\n");
-                if (RegFile[RS] < signExtension(immediate)) {
+                if (RegFile[RS] < immediateExtended) {
                     RegFile[RS] = 1;
                 } else {
                     RegFile[RS] = 0;
