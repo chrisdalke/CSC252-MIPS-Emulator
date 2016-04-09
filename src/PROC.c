@@ -190,7 +190,7 @@ int main(int argc, char * argv[]) {
         immediate = ((CurrentInstruction)) & (0b1111111111111111);
         
         OFFSET = ((CurrentInstruction) & (0b111111111111111));
-        BASE = ((CurrentInstruction) >> 21) & (0b1111));
+        BASE = (((CurrentInstruction) >> 21) & (0b1111));
 
         
         //get the sign-extended version of the immediate variable.
@@ -355,12 +355,12 @@ int main(int argc, char * argv[]) {
             }
                 
             //Load Byte Unsigned
-            case OP_LBU:
+            case OP_LBU: {
                 uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
                 uint8_t vData = readByte(vAddr,false);
                 RegFile[RT] = vData;
                 break;
-            
+            }
             //Load Half-Word
             case OP_LH:
 
@@ -391,7 +391,7 @@ int main(int argc, char * argv[]) {
                 //Loads the most-significant part of a word as a signed value from an unaligned memory address
                 //TODO
 
-                RegFile[RT] = RegFile[RT] | readWord(OFFSET+BASE,false)  //rt ← rt MERGE memory[base+offset]
+                RegFile[RT] = RegFile[RT] | readWord(OFFSET+BASE,false);  //rt ← rt MERGE memory[base+offset]
                 
                 break;
                 
@@ -401,37 +401,37 @@ int main(int argc, char * argv[]) {
                 //Loads the least-significant part of a word as a signed value from an unaligned memory address
                 //TODO
                 
-            RegFile[RT] = RegFile[RT] | readWord(OFFSET+BASE,false) //rt ← rt MERGE memory[base+offset]
+            RegFile[RT] = RegFile[RT] | readWord(OFFSET+BASE,false); //rt ← rt MERGE memory[base+offset]
 
                 break;
                 
             //Store Byte
             case OP_SB:
 
-            readByte(OFFSET+BASE,RegFile[RT],false) ;//memory[base+offset] ← rt
+            readByte(OFFSET+BASE,false) = RegFile[RT];//memory[base+offset] ← rt
                 break;
                 
             //Store Half-Word
             case OP_SH:
-            readWord(OFFSET+BASE,(RegFile[RT] & 0b1111111111111111), false);//memory[base+offset] ← rt
+            readWord(OFFSET+BASE, false) = (RegFile[RT] & 0b1111111111111111);//memory[base+offset] ← rt
                 break;                  //not sure when u take the half word, before or after
-                //DONT GET WHAT IS DIFFERENT WITH THE BOTTOM THREE?? MIPS HANG GUIDE IS LIKE THE SAME
+                //DONT GET WHAT IS DIFFERENT WITH THE BOTTOM THREE?? MIPS HANd GUIDE IS LIKE THE SAME
             //Store Word
             case OP_SW:
                 
                 //Stores a word into the specified memory location
-                readWord(OFFSET+BASE,RegFile[RT],false);
+                readWord(OFFSET+BASE,false) = RegFile[RT];
                 
                 break;
                 
             //Store Word Left
             case OP_SWL:
-            readWord(OFFSET+BASE, RegFile[RT], false)//memory[base+offset] ← rt
+            readWord(OFFSET+BASE, false) = RegFile[RT];//memory[base+offset] ← rt
                 break;
                 
             //Store Word Right
             case OP_SWR:
-               readWord(OFFSET+BASE, RegFile[RT], false); // memory[base+offset] ← rt
+               readWord(OFFSET+BASE, false) = RegFile[RT]; // memory[base+offset] ← rt
                 break;
                 
             //////////////////////////////////////////////////////////
