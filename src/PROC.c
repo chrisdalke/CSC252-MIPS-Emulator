@@ -451,7 +451,7 @@ int main(int argc, char * argv[]) {
                             finalNumber = RegFile[RS] * RegFile[RT]; //here
                             printf("%lld--\n",finalNumber);
                             HIGH = ((finalNumber >> 32) & (0b11111111111111111111111111111111));
-                            LOW = ((finalNumber << 32) & (0b11111111111111111111111111111111));
+                            LOW = ((finalNumber) & (0b11111111111111111111111111111111));
                             printf("%d\n",HIGH );
                             printf("%d\n",LOW );
                         break;
