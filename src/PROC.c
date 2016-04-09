@@ -238,6 +238,7 @@ int main(int argc, char * argv[]) {
             // Branch Instructions
             //////////////////////////////////////////////////////////
                 
+            //Branch on Equal
             case OP_BEQ:
                 if (RegFile[RS] == RegFile[RT]){
                     newPC = PC + immediateExtended;
@@ -245,11 +246,15 @@ int main(int argc, char * argv[]) {
                 }
                 
                 break;
+                
+            //Branch on Equal Likely
             case OP_BEQL:
                 
                 //Figure out what this is
                 
                 break;
+                
+            //Branch on Greater Than Zero
             case OP_BGTZ:
                 
                 if (RegFile[RS] > 0){
@@ -259,6 +264,8 @@ int main(int argc, char * argv[]) {
                 
                 
                 break;
+                
+            //Branch on Less Than Zero
             case OP_BLEZ:
                 
                 
@@ -268,9 +275,13 @@ int main(int argc, char * argv[]) {
                 }
                 
                 break;
+                
+            //Branch on Less than Zero Likely
             case OP_BLEZL:
                 //Figure out what this is
                 break;
+                
+            //Branch on Not Equal
             case  OP_BNE:
                 
                 if (RegFile[RS] != RegFile[RT]){
@@ -278,17 +289,23 @@ int main(int argc, char * argv[]) {
                     branchDelayStatus = 1; //starts branch
                 }
                 break;
+                
+            //Branch on Not Equal Likely
             case OP_BNEL:
                 
                 //Figure out what this is
                 
                 break;
+                
+            //Unconditional Jump
             case  OP_J:
                 
                 newPC = PC + immediateExtended; //update branch target
                 branchDelayStatus = 1; //starts branch
                 
                 break;
+                
+            //Jump And Link
             case  OP_JAL:
                 
                 newPC = PC + immediateExtended; //update branch target
@@ -303,50 +320,75 @@ int main(int argc, char * argv[]) {
             // Memory Instructions
             //////////////////////////////////////////////////////////
                 
-                
+            //Load Byte
             case OP_LB:
+                uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
+                RegFile[RT] = loadByte(vAddr,false);
                 break;
+                
+            //Load Byte Unsigned
             case OP_LBU:
                 break;
+                
+            //Load Half-Word
             case OP_LH:
                 break;
+                
+            //Load Half-Word Unsigned
             case OP_LHU:
                 break;
+                
+            //Load Upper Immediate
             case OP_LUI:
                 break;
+                
+            //Load Word
             case OP_LW:
                 
                 //load the word given by the address into the specified register
                 RegFile[RT] = readWord(RS + immediate,false);
                 
                 break;
+                
+            //Load Word Left
             case OP_LWL:
                 
                 //Loads the most-significant part of a word as a signed value from an unaligned memory address
                 //TODO
                 
                 break;
+                
+            //Load Word Right
             case OP_LWR:
                 
                 //Loads the least-significant part of a word as a signed value from an unaligned memory address
                 //TODO
                 
                 break;
+                
+            //Store Byte
             case OP_SB:
                 break;
+                
+            //Store Half-Word
             case OP_SH:
                 break;
+                
+            //Store Word
             case OP_SW:
                 
                 //Stores a word into the specified memory location
                 writeWord(RS + immediate,RegFile[RT],false);
                 
                 break;
+                
+            //Store Word Left
             case OP_SWL:
                 break;
+                
+            //Store Word Right
             case OP_SWR:
                 break;
-                
                 
             //////////////////////////////////////////////////////////
             // R-Type Instructions
@@ -446,31 +488,32 @@ int main(int argc, char * argv[]) {
                     
                     //AND
                     case FUNC_AND:
-                    RegFile[RD] = RegFile[RS] & RegFile[RT];
+                        RegFile[RD] = RegFile[RS] & RegFile[RT];
                         break;
                         
                     //XOR
                     case FUNC_XOR:
-                    RegFile[RD] = RegFile[RS] ^ RegFile[RT];
+                        RegFile[RD] = RegFile[RS] ^ RegFile[RT];
                         break;
                     
                     //NOR
                     case FUNC_NOR:
-                    RegFile[RD] = ~(RegFile[RS]| RegFile[RT]);
+                        RegFile[RD] = ~(RegFile[RS]| RegFile[RT]);
                         break;
                     
                     //OR
                     case FUNC_OR:
-                    RegFile[RD] = RegFile[RS] | RegFile[RT];
+                        RegFile[RD] = RegFile[RS] | RegFile[RT];
                         break;
                         
                     //SLL (Shift Left Logical)
                     case FUNC_SLL:
-                    RegFile[RD] = RegFile[RT] << RegFile[shamt];//SLL
+                        RegFile[RD] = RegFile[RT] << RegFile[shamt];
                         break;
                         
+                    //SLLV (Shift Left Logical Variable)
                     case FUNC_SLLV:
-                    RegFile[RD] = RegFile[RT] << RegFile[RS];//sllv
+                        RegFile[RD] = RegFile[RT] << RegFile[RS];
                         break;
                         
                     case FUNC_SLTU:
@@ -490,14 +533,32 @@ int main(int argc, char * argv[]) {
                         RegFile[RD] = RegFile[RT] >> RegFile[shamt];
                         break;
                         
+                    //SRLV (Shift Right Logical Variable)
                     case FUNC_SRLV:
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
+                    
+                    //////////////////////////////////////////////////////////
+                    // Jump Instructions (R-Type)
+                    //////////////////////////////////////////////////////////
                         
+                    //Jump and Link Register
                     case FUNC_JALR:
+                        
+                        newPC = PC + RegFile[RS]; //update branch target
+                        branchDelayStatus = 1; //starts branch
+                        
+                        //Update return address
+                        RegFile[RD] = PC + 8;
+                        
                         break;
                         
+                    //Jump Register
                     case FUNC_JR:
+                        
+                        newPC = PC + RegFile[31]; //update branch target
+                        branchDelayStatus = 1; //starts branch
+                        
                         break;
                         
                     default:
@@ -506,12 +567,64 @@ int main(int argc, char * argv[]) {
                 
                 break;
             case OP_REGIMM:
+                
+                //////////////////////////////////////////////////////////
+                // Compare to Zero Branch Instructions
+                //////////////////////////////////////////////////////////
+                
+                //Get The code to see which type of comparison we should do
+                int zeroComparisonType = RegFile[RT];
+                bool doBranch = false;
+                bool doLink = false;
+                
+                switch (zeroComparisonType){
+                        //Branch Greater Than or Equal to Zero
+                    case 0b1:
+                        if (RegFile[RS] >= 0){
+                            doBranch = true;
+                        }
+                        break;
+                    case 0b10001:
+                        //Branch Greater Than or Equal to Zero And Link
+                        if (RegFile[RS] >= 0){
+                            doBranch = true;
+                            doLink = true;
+                        }
+                        break;
+                    case 0b0:
+                        //Branch Less Than Zero
+                        if (RegFile[RS] < 0){
+                            doBranch = true;
+                        }
+                        break;
+                    case 0b10000:
+                        //Branch Less Than Zero And Link
+                        if (RegFile[RS] < 0){
+                            doBranch = true;
+                            doLink = true;
+                        }
+                        break;
+                    default:
+                        printf("ERROR: IMPROPER ZERO COMPARISON TYPE");
+                        break;
+                }
+                
+                if (doBranch){
+                    
+                    newPC = PC + immediateExtended; //update branch target
+                    branchDelayStatus = 1; //starts branch
+                    
+                    if (doLink){
+                        RegFile[RD] = PC + 8;
+                    }
+                }
+                
+                
                 break;
             default:
                 printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
                 break;
         }
-        
         
         //After we are done, increase the program counter.
         PC = PC + 4;
