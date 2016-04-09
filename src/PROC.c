@@ -400,13 +400,13 @@ int main(int argc, char * argv[]) {
             //Store Byte
             case OP_SB:
 
-           RegFile[RT] =   writeByte(OFFSET+BASE,false);//memory[base+offset] ← rt
+           writeByte(OFFSET+BASE,RegFile[RT], false);//memory[base+offset] ← rt
           
                 break;
                 
             //Store Half-Word
             case OP_SH:
-             RegFile[RT] = (writeWord(OFFSET+BASE, false) & 0b1111111111111111);//memory[base+offset] ← rt
+             (writeWord(OFFSET+BASE, RegFile[RT], false) & 0b1111111111111111);//memory[base+offset] ← rt
             
                 break;                  //not sure when u take the half word, before or after
                 //DONT GET WHAT IS DIFFERENT WITH THE BOTTOM THREE?? MIPS HANd GUIDE IS LIKE THE SAME
@@ -414,19 +414,19 @@ int main(int argc, char * argv[]) {
             case OP_SW:
              
                 //Stores a word into the specified memory location
-                 RegFile[RT] = writeWord(OFFSET+BASE,false);
+                 writeWord(OFFSET+BASE, RegFile[RT], false);
                 
                 break;
                 
             //Store Word Left
             case OP_SWL:
-            RegFile[RT] =  writeWord(OFFSET+BASE, false);//memory[base+offset] ← rt
+            writeWord(OFFSET+BASE, RegFile[RT], false);//memory[base+offset] ← rt
            
                 break;
                 
             //Store Word Right
             case OP_SWR:
-             RegFile[RT] = writeWord(OFFSET+BASE, false); // memory[base+offset] ← rt
+           writeWord(OFFSET+BASE, RegFile[RT], false); // memory[base+offset] ← rt
           
                 break;
                 
