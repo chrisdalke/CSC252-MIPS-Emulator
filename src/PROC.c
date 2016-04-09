@@ -386,6 +386,8 @@ int main(int argc, char * argv[]) {
                 
             //Load Upper Immediate
             case OP_LUI:
+                RegFile[RT] = ((immediate <<16) || 0b0000000000000000); //move immediate 16 bits then
+                                                                        //then merge with 0000's
                 break;
                 
             //Load Word
