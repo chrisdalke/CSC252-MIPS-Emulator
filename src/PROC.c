@@ -171,7 +171,7 @@ int main(int argc, char * argv[]) {
         printf("Current opcode =  %s\n",byte_to_binary(opcode));
         
         //Preload some variables that will be used for many commands
-        unsigned char RS, RT, RD, vAddr, shamt, temp, immediate; // this might be a prob cuz of for loop
+        unsigned char RS, RT, RD, shamt, temp, immediate; // this might be a prob cuz of for loop
         unsigned char SPECIAL;
         RS = ((CurrentInstruction) >> 21) & (0b0011111);
         RT = ((CurrentInstruction) >> 16) & (0b0011111);
@@ -323,14 +323,16 @@ int main(int argc, char * argv[]) {
                 
             //Load Byte
             case OP_LB:
-                vAddr = immediateExtended + signExtension(RegFile[RS]);
-                RegFile[RT] = loadByte(vAddr,false);
+            {
+                uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
+                RegFile[RT] = readByte(vAddr,false);
                 break;
+            }
                 
             //Load Byte Unsigned
             case OP_LBU:
                 break;
-                
+            
             //Load Half-Word
             case OP_LH:
                 break;
