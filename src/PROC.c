@@ -37,12 +37,9 @@
 #define  OP_SLTI    0b00001010
 #define  OP_SLTIU   0b00001011
 #define  OP_BEQ     0b00000100
-#define  OP_BEQL    0b00010100
 #define  OP_BGTZ    0b00000111
 #define  OP_BLEZ    0b00000110
-#define  OP_BLEZL   0b00010110
 #define  OP_BNE     0b00000101
-#define  OP_BNEL    0b00010101
 #define  OP_J       0b00000010
 #define  OP_JAL     0b00000011
 #define  OP_LB      0b00100000
@@ -62,7 +59,7 @@
 //Func Values
 
 #define FUNC_ADD    0b00100000
-#define FUNC_ADDU   0b00000001
+#define FUNC_ADDU   0b00100001
 #define FUNC_SUB    0b00100010 
 #define FUNC_SUBU   0b10000011
 #define FUNC_DIV    0b00011010
@@ -180,7 +177,7 @@ int main(int argc, char * argv[]) {
         unsigned char opcode = ((CurrentInstruction) >> 26) & (0b00111111);
         
         //Test: print the opcode for the current instruction.
-        printf("Current opcode =  %s\n",byte_to_binary(opcode));
+        //printf("Current opcode =  %s\n",byte_to_binary(opcode));
         
         //Preload some variables that will be used for many commands
         unsigned char RS, RT, RD, shamt, temp, immediate, OFFSET, BASE; // this might be a prob cuz of for loop
@@ -207,8 +204,6 @@ int main(int argc, char * argv[]) {
             case OP_ADDI:
             {
                 RegFile[RT] = RegFile[RS] + immediate;
-                printf("addi\n");
-                printf("%d\n",RegFile[RT]);
                 break;
             }
                 
@@ -274,9 +269,7 @@ int main(int argc, char * argv[]) {
                 //TODO: branches are completely broken
                 //currently logic for branches are executed in the wrong order
                 
-                //Branch on Equal
-                //Branch on Equal Likely
-            case OP_BEQL:
+            //Branch on Equal
             case OP_BEQ:
             {
                 if (RegFile[RS] == RegFile[RT]){
@@ -296,9 +289,7 @@ int main(int argc, char * argv[]) {
                 break;
             }
                 
-                //Branch on Less Than Zero
-                //Branch on Less than Zero Likely
-            case OP_BLEZL:
+            //Branch on Less Than Zero
             case OP_BLEZ:
             {
                 
@@ -310,9 +301,7 @@ int main(int argc, char * argv[]) {
                 break;
             }
                 
-                //Branch on Not Equal
-                //Branch on Not Equal Likely
-            case OP_BNEL:
+            //Branch on Not Equal
             case  OP_BNE:
             {
                 if (RegFile[RS] != RegFile[RT]){
@@ -451,7 +440,7 @@ int main(int argc, char * argv[]) {
                 //TO CHNAGE NEED TO CHANGE THE DO BITWISE TO GET THE BITS TO COMPARE
               
                  SPECIAL = ((CurrentInstruction)) & (0b00111111);
-                printf("FUNC = %s\n",byte_to_binary(SPECIAL));
+                
                 // getting the last bits to compare in second switch statment
 
                 RD = ((CurrentInstruction) >> 11) & (0b11111);
@@ -638,6 +627,7 @@ int main(int argc, char * argv[]) {
                         
                     default:
                         printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
+                        printf("FUNC = %s\n",byte_to_binary(SPECIAL));
                 }
                 
                 break;
@@ -677,6 +667,7 @@ int main(int argc, char * argv[]) {
                 
             default:
                 printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
+                printf("OPCODE = %s\n",byte_to_binary(opcode));
                 break;
         }
         
