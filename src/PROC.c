@@ -122,7 +122,7 @@ const char *byte_to_binary(int x)
 int main(int argc, char * argv[]) {
 
 
-    
+    int zeroComparisonType;
     int MaxInst = 0;
     int status = 0;
     uint32_t i;
@@ -171,7 +171,7 @@ int main(int argc, char * argv[]) {
         printf("Current opcode =  %s\n",byte_to_binary(opcode));
         
         //Preload some variables that will be used for many commands
-        unsigned char RS, RT, RD, shamt, temp, immediate; // this might be a prob cuz of for loop
+        unsigned char RS, RT, RD, vAddr, shamt, temp, immediate; // this might be a prob cuz of for loop
         unsigned char SPECIAL;
         RS = ((CurrentInstruction) >> 21) & (0b0011111);
         RT = ((CurrentInstruction) >> 16) & (0b0011111);
@@ -323,7 +323,7 @@ int main(int argc, char * argv[]) {
                 
             //Load Byte
             case OP_LB:
-                uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
+                vAddr = immediateExtended + signExtension(RegFile[RS]);
                 RegFile[RT] = loadByte(vAddr,false);
                 break;
                 
@@ -450,8 +450,8 @@ int main(int argc, char * argv[]) {
                             //high = 0-31, of 64 bit number, 32-64 is low, see ->
                             finalNumber = RegFile[RS] * RegFile[RT]; //here
                             printf("%lld--\n",finalNumber);
-                            HIGH = ((finalNumber >> 31) & (0b11111111111111111111111111111111));
-                            LOW = ((finalNumber << 31) & (0b11111111111111111111111111111111));
+                            HIGH = ((finalNumber >> 32) & (0b11111111111111111111111111111111));
+                            LOW = ((finalNumber << 32) & (0b11111111111111111111111111111111));
                             printf("%d\n",HIGH );
                             printf("%d\n",LOW );
                         break;
@@ -459,8 +459,8 @@ int main(int argc, char * argv[]) {
                     case FUNC_MULTU: // same as above
                       //high = 0-31, of 64 bit number, 32-64 is low, see ->
                            finalNumber = (RegFile[RS] * RegFile[RT]); //here
-                            HIGH = ((finalNumber >> 31) & (0b00111111));
-                            LOW = ((finalNumber << 31) & (0b00111111));
+                            HIGH = ((finalNumber >> 32) & (0b00111111));
+                            LOW = ((finalNumber << 32) & (0b00111111));
                         break;
                         
                     case FUNC_MFHI:
@@ -577,7 +577,7 @@ int main(int argc, char * argv[]) {
                 //////////////////////////////////////////////////////////
                 
                 //Get The code to see which type of comparison we should do
-                int zeroComparisonType = RegFile[RT];
+                zeroComparisonType = RegFile[RT];
                 bool doBranch = false;
                 bool doLink = false;
                 
