@@ -190,7 +190,7 @@ int main(int argc, char * argv[]) {
         immediate = ((CurrentInstruction)) & (0b1111111111111111);
         
         OFFSET = ((CurrentInstruction) & (0b111111111111111));
-        BASE = ((CurrentInstruction) >> 21) & (0b1111))
+        BASE = ((CurrentInstruction) >> 21) & (0b1111));
 
         
         //get the sign-extended version of the immediate variable.
@@ -364,7 +364,7 @@ int main(int argc, char * argv[]) {
             //Load Half-Word
             case OP_LH:
 
-                RegFile[RT] = (readWord(OFFSET+BASE,false) & 0b11111111111111)
+                RegFile[RT] = (readWord(OFFSET+BASE,false) & 0b11111111111111);
                 break;
                 
             //Load Half-Word Unsigned
