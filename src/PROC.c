@@ -217,7 +217,7 @@ int main(int argc, char * argv[]) {
                 
             //Bit XOR Immediate
             case OP_XORI:
-                RegFile[RT] = RegFile[RS] ^ immediate;       
+                RegFile[RT] = (RegFile[RS] ^ immediate);       
                 break;
                 
             //Bit OR Immediate
@@ -470,9 +470,7 @@ int main(int argc, char * argv[]) {
                             printf("%lld--\n",finalNumber);
                             HIGH = ((finalNumber >> 32) & (0b11111111111111111111111111111111));
                             LOW = ((finalNumber) & (0b11111111111111111111111111111111));
-                            printf("%d\n",HIGH );
-                            printf("%d\n",LOW );
-                        break;
+                                                  break;
                         
                     case FUNC_MULTU: // same as above
                       //high = 0-31, of 64 bit number, 32-64 is low, see ->
@@ -482,11 +480,14 @@ int main(int argc, char * argv[]) {
                         break;
                         
                     case FUNC_MFHI:
+                    printf("%d\n",HIGH);
                         RegFile[RD] = HIGH;
                         break;
                         
                     case FUNC_MFLO:
                    printf("lastCommand\n" );
+                   printf("%d\n",LOW );
+                   printf("%d\n",RD );
                         RegFile[RD] = LOW;
                         break;
                         
@@ -515,7 +516,11 @@ int main(int argc, char * argv[]) {
                         
                     //XOR
                     case FUNC_XOR:
-                        RegFile[RD] = RegFile[RS] ^ RegFile[RT];
+                    printf("hello!!\n");
+                    printf("%d\n",RD );
+                    printf("%d\n",RegFile[RS] );
+                    printf("%d\n",RegFile[RT] );
+                        RegFile[RD] = (RegFile[RS] ^ RegFile[RT]);
                         break;
                     
                     //NOR
