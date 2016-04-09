@@ -52,7 +52,7 @@
 
 #define FUNC_ADD    0b00100000
 #define FUNC_ADDU   0b00000001
-#define FUNC_SUB    0b10000010 
+#define FUNC_SUB    0b00100010 
 #define FUNC_SUBU   0b10000011
 #define FUNC_DIV    0b00011010
 #define FUNC_DIVU   0b00011011
@@ -172,14 +172,14 @@ int main(int argc, char * argv[]) {
         
         //Preload some variables that will be used for many commands
         unsigned char RS, RT, RD, shamt, temp, immediate; // this might be a prob cuz of for loop
-        RS = ((CurrentInstruction) >> 21) & (0b00111111);
-        RT = ((CurrentInstruction) >> 16) & (0b00111111);
+        unsigned char SPECIAL;
+        RS = ((CurrentInstruction) >> 21) & (0b0011111);
+        RT = ((CurrentInstruction) >> 16) & (0b0011111);
         immediate = ((CurrentInstruction)) & (0b1111111111111111);
-        
         
         //get the sign-extended version of the immediate variable.
         int immediateExtended = signExtension(immediate);
-        
+
         int64_t finalNumber, lowNumber, highNumber;
         switch(opcode) {
                 
@@ -190,6 +190,7 @@ int main(int argc, char * argv[]) {
             //Add Immediate (Signed)
             case OP_ADDI:
                 RegFile[RT] = RegFile[RS] + immediate;
+                printf("addi\n");
                 break;
                 
             //Add Immediate (Unsigned)
@@ -398,13 +399,13 @@ int main(int argc, char * argv[]) {
                 
                 //SPECIAL CASE OPCODE = 0
                 //TO CHNAGE NEED TO CHANGE THE DO BITWISE TO GET THE BITS TO COMPARE
-                printf("SPECIAL CASE OPCODE = 0");
-                unsigned char SPECIAL = ((opcode)) & (0b00111111);
+              
+                 SPECIAL = ((CurrentInstruction)) & (0b00111111);
                 printf("FUNC = %s\n",byte_to_binary(SPECIAL));
                 // getting the last bits to compare in second switch statment
 
-                RD = ((CurrentInstruction) >> 11) & (0b00111111);
-                shamt = ((CurrentInstruction) >> 6) & (0b00111111);
+                RD = ((CurrentInstruction) >> 11) & (0b11111);
+                shamt = ((CurrentInstruction) >> 5) & (0b0011111);
                 
                 switch(SPECIAL) {
                         
@@ -413,7 +414,6 @@ int main(int argc, char * argv[]) {
                     //////////////////////////////////////////////////////////
                         
                     case FUNC_ADD:
-                        //Todo: overflow behavior? SEE PROJECT DESCP(BB) -> WE DO NOT NEED TO DO THIS
                         RegFile[RD] = RegFile[RS] + RegFile[RT];
                         break;
                         
@@ -422,8 +422,8 @@ int main(int argc, char * argv[]) {
                         break;
                         
                     case  FUNC_SUB:
-                        //Todo: overflow behavior? SEE PROJECT DESCP(BB) -> WE DO NOT NEED TO DO THIS
                         RegFile[RD] = RegFile[RS] - RegFile[RT];
+                          printf("sub\n");
                         break;
                         
                     case  FUNC_SUBU:
@@ -449,8 +449,11 @@ int main(int argc, char * argv[]) {
                     case FUNC_MULT: //not sure if I did this correctly
                             //high = 0-31, of 64 bit number, 32-64 is low, see ->
                             finalNumber = RegFile[RS] * RegFile[RT]; //here
-                            HIGH = ((finalNumber >> 31) & (0b00111111));
-                            LOW = ((finalNumber << 31) & (0b00111111));
+                            printf("%lld--\n",finalNumber);
+                            HIGH = ((finalNumber >> 31) & (0b11111111111111111111111111111111));
+                            LOW = ((finalNumber << 31) & (0b11111111111111111111111111111111));
+                            printf("%d\n",HIGH );
+                            printf("%d\n",LOW );
                         break;
                         
                     case FUNC_MULTU: // same as above
@@ -465,6 +468,7 @@ int main(int argc, char * argv[]) {
                         break;
                         
                     case FUNC_MFLO:
+                   printf("lastCommand\n" );
                         RegFile[RD] = LOW;
                         break;
                         
@@ -641,9 +645,10 @@ int main(int argc, char * argv[]) {
         //////////////////////////////////////////////////////////
         // End of Main Instruction Simulation
         //////////////////////////////////////////////////////////
-        
+      
     } //end fori
     
+    printRegFile();
     
     //Close file pointers & free allocated Memory
     closeFDT();
