@@ -407,17 +407,20 @@ int main(int argc, char * argv[]) {
                 
             //Store Byte
             case OP_SB:
+
+            readByte(OFFSET+BASE,RegFile[RT],false) ;//memory[base+offset] ← rt
                 break;
                 
             //Store Half-Word
             case OP_SH:
-                break;
+            readWord(OFFSET+BASE,(RegFile[RT] & 0b1111111111111111), false);//memory[base+offset] ← rt
+                break;                  //not sure when u take the half word, before or after
                 
             //Store Word
             case OP_SW:
                 
                 //Stores a word into the specified memory location
-                writeWord(RS + immediate,RegFile[RT],false);
+                readWord(RS + immediate,RegFile[RT],false);
                 
                 break;
                 
