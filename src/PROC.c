@@ -1,3 +1,14 @@
+//////////////////////////////////////////////////////////
+//
+// CSC 252 Project 3
+//
+// Wilfred Wallis and Chris Dalke
+//
+//////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////
+// Includes
+//////////////////////////////////////////////////////////
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -78,7 +89,7 @@
 #define FUNC_JR     0b00001000
 
 //////////////////////////////////////////////////////////
-// End of File
+// Main Program Initialization
 //////////////////////////////////////////////////////////
 
 //Stats
@@ -324,13 +335,18 @@ int main(int argc, char * argv[]) {
             //Load Byte
             case OP_LB:
             {
+                //This needs to take the sign bit and shift it over!!
                 uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
-                RegFile[RT] = readByte(vAddr,false);
+                int8_t vData = readByte(vAddr,false);
+                RegFile[RT] = vData;
                 break;
             }
                 
             //Load Byte Unsigned
             case OP_LBU:
+                uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
+                uint8_t vData = readByte(vAddr,false);
+                RegFile[RT] = vData;
                 break;
             
             //Load Half-Word
