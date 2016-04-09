@@ -637,6 +637,8 @@ int main(int argc, char * argv[]) {
                             doLink = true;
                         }
                         break;
+                    case 0b0;
+                        RegFile[RS] << 0;
                     default:
                         printf("ERROR: IMPROPER ZERO COMPARISON TYPE");
                         break;
