@@ -408,30 +408,34 @@ int main(int argc, char * argv[]) {
             //Store Byte
             case OP_SB:
 
-            readByte(OFFSET+BASE,false) = RegFile[RT];//memory[base+offset] ← rt
+           RegFile[RT] =   readByte(OFFSET+BASE,false);//memory[base+offset] ← rt
+          
                 break;
                 
             //Store Half-Word
             case OP_SH:
-            readWord(OFFSET+BASE, false) = (RegFile[RT] & 0b1111111111111111);//memory[base+offset] ← rt
+             RegFile[RT] = (readWord(OFFSET+BASE, false) & 0b1111111111111111);//memory[base+offset] ← rt
+            
                 break;                  //not sure when u take the half word, before or after
                 //DONT GET WHAT IS DIFFERENT WITH THE BOTTOM THREE?? MIPS HANd GUIDE IS LIKE THE SAME
             //Store Word
             case OP_SW:
-                
+             
                 //Stores a word into the specified memory location
-                readWord(OFFSET+BASE,false) = RegFile[RT];
+                 RegFile[RT] = readWord(OFFSET+BASE,false);
                 
                 break;
                 
             //Store Word Left
             case OP_SWL:
-            readWord(OFFSET+BASE, false) = RegFile[RT];//memory[base+offset] ← rt
+            RegFile[RT] =  readWord(OFFSET+BASE, false) =;//memory[base+offset] ← rt
+           
                 break;
                 
             //Store Word Right
             case OP_SWR:
-               readWord(OFFSET+BASE, false) = RegFile[RT]; // memory[base+offset] ← rt
+             RegFile[RT] = readWord(OFFSET+BASE, false); // memory[base+offset] ← rt
+          
                 break;
                 
             //////////////////////////////////////////////////////////
@@ -466,7 +470,6 @@ int main(int argc, char * argv[]) {
                         
                     case  FUNC_SUB:
                         RegFile[RD] = RegFile[RS] - RegFile[RT];
-                          printf("sub\n");
                         break;
                         
                     case  FUNC_SUBU:
