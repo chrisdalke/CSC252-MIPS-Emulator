@@ -136,7 +136,7 @@ int main(int argc, char * argv[]) {
     int MaxInst = 0;
     int status = 0;
     uint32_t i;
-    uint32_t PC,newPC,
+    uint32_t PC,newPC;
     uint32_t CurrentInstruction;
     
     //High and Low registers
