@@ -654,7 +654,7 @@ int main(int argc, char * argv[]) {
                 
                 switch (zeroComparisonType){
                     //Branch Greater Than or Equal to Zero
-                    case 0b00010000: if (RegFile[RS] >= 0){ doBranch = true; } break;
+                    case 0b00000001: if (RegFile[RS] >= 0){ doBranch = true; } break;
                     //Branch Greater Than or Equal to Zero And Link
                     case 0b00010001: if (RegFile[RS] >= 0){ doBranch = true; doLink = true; } break;
                     //Branch Less Than Zero
