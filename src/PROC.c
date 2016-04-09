@@ -105,6 +105,7 @@ void write_initialization_vector(uint32_t sp, uint32_t gp, uint32_t start) {
     printRegFile();
     
 }
+
 //THIS IS USED for some of the addi methods -> taken from github
 int signExtension(int instr) {
     int value = (0x0000FFFF & instr);
@@ -204,42 +205,53 @@ int main(int argc, char * argv[]) {
             
             //Add Immediate (Signed)
             case OP_ADDI:
+            {
                 RegFile[RT] = RegFile[RS] + immediate;
                 printf("addi\n");
                 break;
+            }
                 
             //Add Immediate (Unsigned)
             case OP_ADDIU:
+            {
                 temp = RegFile[RS] + signExtension(immediate);
                 RegFile[RT] = temp;
                 break;
+            }
                 
             //Bit AND Immediate
             case OP_ANDI:
+            {
                 RegFile[RT] = RegFile[RS] + signExtension(immediate);
                 break;
+            }
                 
             //Bit XOR Immediate
             case OP_XORI:
-                RegFile[RT] = (RegFile[RS] ^ immediate);       
+                RegFile[RT] = (RegFile[RS] ^ immediate);
                 break;
                 
             //Bit OR Immediate
             case OP_ORI:
+            {
                 RegFile[RT] = RegFile[RS] | immediate;
                 break;
+            }
                 
+            //Set on Less Than Immediate
             case OP_SLTI:
-                
+            {
                 if (RegFile[RS] < signExtension(immediate)) {
                     RegFile[RS] = 1;
                 } else {
                     RegFile[RS] = 0;
                 }
-                
                 break;
-            case OP_SLTIU:
+            }
                 
+            //Set on Less Than Immediate Unsigned
+            case OP_SLTIU:
+            {
                 //This implementation taken from the mips handbook
                 //Check to make sure this actually works properly
                 if ((0 || RegFile[RS]) < (0 || signExtension(immediate))) {
@@ -247,8 +259,8 @@ int main(int argc, char * argv[]) {
                 } else {
                     RegFile[RS] = 0;
                 }
-                
                 break;
+            }
                 
             //////////////////////////////////////////////////////////
             // Branch Instructions
@@ -256,34 +268,36 @@ int main(int argc, char * argv[]) {
                 
             //Branch on Equal
             case OP_BEQ:
+            {
                 if (RegFile[RS] == RegFile[RT]){
                     newPC = PC + immediateExtended;
                     branchDelayStatus = 1; //starts branch
                 }
                 
                 break;
+            }
                 
             //Branch on Equal Likely
             case OP_BEQL:
-                
+            {
                 //Figure out what this is
                 
                 break;
+            }
                 
             //Branch on Greater Than Zero
             case OP_BGTZ:
-                
+            {
                 if (RegFile[RS] > 0){
                     newPC = PC + immediateExtended;
                     branchDelayStatus = 1; //starts branch
                 }
-                
-                
                 break;
+            }
                 
             //Branch on Less Than Zero
             case OP_BLEZ:
-                
+            {
                 
                 if (RegFile[RS] <= 0){
                     newPC = PC + immediateExtended;
@@ -291,39 +305,45 @@ int main(int argc, char * argv[]) {
                 }
                 
                 break;
+            }
                 
             //Branch on Less than Zero Likely
             case OP_BLEZL:
+            {
                 //Figure out what this is
                 break;
+            }
                 
             //Branch on Not Equal
             case  OP_BNE:
-                
+            {
                 if (RegFile[RS] != RegFile[RT]){
                     newPC = PC + immediateExtended;
                     branchDelayStatus = 1; //starts branch
                 }
                 break;
+            }
                 
             //Branch on Not Equal Likely
             case OP_BNEL:
-                
+            {
                 //Figure out what this is
                 
                 break;
+            }
                 
             //Unconditional Jump
             case  OP_J:
-                
+            {
                 newPC = PC + immediateExtended; //update branch target
                 branchDelayStatus = 1; //starts branch
                 
                 break;
+            }
                 
             //Jump And Link
             case  OP_JAL:
-                
+            {
                 newPC = PC + immediateExtended; //update branch target
                 branchDelayStatus = 1; //starts branch
                 
@@ -331,6 +351,7 @@ int main(int argc, char * argv[]) {
                 RegFile[31] = PC + 8;
                 
                 break;
+            }
                 
             //////////////////////////////////////////////////////////
             // Memory Instructions
@@ -485,11 +506,13 @@ int main(int argc, char * argv[]) {
                             LOW = ((finalNumber << 32) & (0b00111111));
                         break;
                         
+                    //Move From High
                     case FUNC_MFHI:
                     printf("%d\n",HIGH);
                         RegFile[RD] = HIGH;
                         break;
                         
+                    //Move From Low
                     case FUNC_MFLO:
                    printf("lastCommand\n" );
                    printf("%d\n",LOW );
@@ -497,15 +520,18 @@ int main(int argc, char * argv[]) {
                         RegFile[RD] = LOW;
                         break;
                         
+                    //Set on Less Than
                     case  FUNC_SLT:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
                         
+                    //Move To High
                     case FUNC_MTHI: // a div, mult, or something with high low must be used
                                      // before this command
                         HIGH = RegFile[RS];
                         break;
                         
+                    //Move To Low
                     case FUNC_MTLO:
                         LOW = RegFile[RS];
                         break;
@@ -517,18 +543,18 @@ int main(int argc, char * argv[]) {
                     
                     //AND
                     case FUNC_AND:
+                    {
                         RegFile[RD] = RegFile[RS] & RegFile[RT];
                         break;
+                    }
                         
                     //XOR
                     case FUNC_XOR:
-                    printf("hello!!\n");
-                    printf("%d\n",RD );
-                    printf("%d\n",RegFile[RS] );
-                    printf("%d\n",RegFile[RT] );
-                        RegFile[RD] = (RegFile[RS] ^ RegFile[RT]);
+                    {
+                        RegFile[RD] = RegFile[RS] ^ RegFile[RT];
                         break;
-                    
+                    }
+                        
                     //NOR
                     case FUNC_NOR:
                         RegFile[RD] = ~(RegFile[RS]| RegFile[RT]);
@@ -549,14 +575,18 @@ int main(int argc, char * argv[]) {
                         RegFile[RD] = RegFile[RT] << RegFile[RS];
                         break;
                         
+                    //Set On Less Than Unsigned
                     case FUNC_SLTU:
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
                         
+                    //Shift Word Right Arithmetic
                     case FUNC_SRA:
-                        RegFile[RD] = RegFile[RT] + RegFile[shamt];
+                        //Shifts right but arithmetically so copy sign bit
+                        RegFile[RD] = RegFile[RT] >> shamt;
                         break;
                         
+                    //Shift Word Right Arithmetic Variable
                     case FUNC_SRAV:
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
@@ -577,21 +607,16 @@ int main(int argc, char * argv[]) {
                         
                     //Jump and Link Register
                     case FUNC_JALR:
-                        
                         newPC = PC + RegFile[RS]; //update branch target
                         branchDelayStatus = 1; //starts branch
-                        
                         //Update return address
                         RegFile[RD] = PC + 8;
-                        
                         break;
                         
                     //Jump Register
                     case FUNC_JR:
-                        
                         newPC = PC + RegFile[31]; //update branch target
                         branchDelayStatus = 1; //starts branch
-                        
                         break;
                         
                     default:
@@ -599,6 +624,7 @@ int main(int argc, char * argv[]) {
                 }
                 
                 break;
+                
             case OP_REGIMM:
                 
                 //////////////////////////////////////////////////////////
@@ -653,9 +679,8 @@ int main(int argc, char * argv[]) {
                         RegFile[RD] = PC + 8;
                     }
                 }
-                
-                
                 break;
+                
             default:
                 printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
                 break;
@@ -672,6 +697,8 @@ int main(int argc, char * argv[]) {
             branchDelayStatus = 0;
         }
         
+        //Hardcode the zero register to always be zero
+        RegFile[0] = 0;
         
         //////////////////////////////////////////////////////////
         // End of Main Instruction Simulation
