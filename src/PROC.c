@@ -182,11 +182,15 @@ int main(int argc, char * argv[]) {
         printf("Current opcode =  %s\n",byte_to_binary(opcode));
         
         //Preload some variables that will be used for many commands
-        unsigned char RS, RT, RD, shamt, temp, immediate; // this might be a prob cuz of for loop
+        unsigned char RS, RT, RD, shamt, temp, immediate, OFFSET, BASE; // this might be a prob cuz of for loop
         unsigned char SPECIAL;
         RS = ((CurrentInstruction) >> 21) & (0b0011111);
         RT = ((CurrentInstruction) >> 16) & (0b0011111);
         immediate = ((CurrentInstruction)) & (0b1111111111111111);
+        
+        OFFSET = ((CurrentInstruction) & (0b111111111111111));
+        BASE = ((CurrentInstruction) >> 21) & (0b1111))
+
         
         //get the sign-extended version of the immediate variable.
         int immediateExtended = signExtension(immediate);
@@ -351,6 +355,8 @@ int main(int argc, char * argv[]) {
             
             //Load Half-Word
             case OP_LH:
+
+                RegFile[RT] = (readWord(OFFSET+BASE,false) & 0b11111111111111)
                 break;
                 
             //Load Half-Word Unsigned
