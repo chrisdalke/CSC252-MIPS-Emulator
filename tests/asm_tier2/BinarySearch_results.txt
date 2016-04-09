@@ -1,0 +1,1 @@
+Should display either ‘Target not found’ or 7
