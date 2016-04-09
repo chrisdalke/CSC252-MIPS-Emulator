@@ -406,7 +406,7 @@ int main(int argc, char * argv[]) {
                 
             //Store Half-Word
             case OP_SH:
-             (writeWord(OFFSET+BASE, RegFile[RT], false) & 0b1111111111111111);//memory[base+offset] ← rt
+             (writeWord(OFFSET+BASE, (RegFile[RT] & 0b1111111111111111), false) ;//memory[base+offset] ← rt
             
                 break;                  //not sure when u take the half word, before or after
                 //DONT GET WHAT IS DIFFERENT WITH THE BOTTOM THREE?? MIPS HANd GUIDE IS LIKE THE SAME
