@@ -324,7 +324,7 @@ int main(int argc, char * argv[]) {
             //Load Byte
             case OP_LB:
                 uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
-                RegFile[RT] = loadByte(vAddr,false);
+                RegFile[RT] = readByte(vAddr,false);
                 break;
                 
             //Load Byte Unsigned
