@@ -208,6 +208,7 @@ int main(int argc, char * argv[]) {
             {
                 RegFile[RT] = RegFile[RS] + immediate;
                 printf("addi\n");
+                printf("%d\n",RegFile[RT]);
                 break;
             }
                 
@@ -222,6 +223,7 @@ int main(int argc, char * argv[]) {
             //Bit AND Immediate
             case OP_ANDI:
             {
+                printf("addi COMMAND\n");
                 RegFile[RT] = RegFile[RS] + signExtension(immediate);
                 break;
             }
@@ -236,6 +238,7 @@ int main(int argc, char * argv[]) {
             //Bit OR Immediate
             case OP_ORI:
             {
+                printf("yoooo\n");
                 RegFile[RT] = RegFile[RS] | immediate;
                 break;
             }
@@ -373,7 +376,7 @@ int main(int argc, char * argv[]) {
                 
             //Load Upper Immediate
             case OP_LUI:
-                RegFile[RT] = ((immediate <<16) || 0b0000000000000000); //move immediate 16 bits then
+                RegFile[RT] = (immediate <<16); //move immediate 16 bits then
                                                                         //then merge with 0000's
                 break;
                 
@@ -408,13 +411,13 @@ int main(int argc, char * argv[]) {
             //Store Byte
             case OP_SB:
 
-           RegFile[RT] =   readByte(OFFSET+BASE,false);//memory[base+offset] ← rt
+           RegFile[RT] =   writeByte(OFFSET+BASE,false);//memory[base+offset] ← rt
           
                 break;
                 
             //Store Half-Word
             case OP_SH:
-             RegFile[RT] = (readWord(OFFSET+BASE, false) & 0b1111111111111111);//memory[base+offset] ← rt
+             RegFile[RT] = (writeWord(OFFSET+BASE, false) & 0b1111111111111111);//memory[base+offset] ← rt
             
                 break;                  //not sure when u take the half word, before or after
                 //DONT GET WHAT IS DIFFERENT WITH THE BOTTOM THREE?? MIPS HANd GUIDE IS LIKE THE SAME
@@ -422,19 +425,19 @@ int main(int argc, char * argv[]) {
             case OP_SW:
              
                 //Stores a word into the specified memory location
-                 RegFile[RT] = readWord(OFFSET+BASE,false);
+                 RegFile[RT] = writeWord(OFFSET+BASE,false);
                 
                 break;
                 
             //Store Word Left
             case OP_SWL:
-            RegFile[RT] =  readWord(OFFSET+BASE, false);//memory[base+offset] ← rt
+            RegFile[RT] =  writeWord(OFFSET+BASE, false);//memory[base+offset] ← rt
            
                 break;
                 
             //Store Word Right
             case OP_SWR:
-             RegFile[RT] = readWord(OFFSET+BASE, false); // memory[base+offset] ← rt
+             RegFile[RT] = writeWord(OFFSET+BASE, false); // memory[base+offset] ← rt
           
                 break;
                 
@@ -495,7 +498,6 @@ int main(int argc, char * argv[]) {
                     case FUNC_MULT: //not sure if I did this correctly
                             //high = 0-31, of 64 bit number, 32-64 is low, see ->
                             finalNumber = RegFile[RS] * RegFile[RT]; //here
-                            printf("%lld--\n",finalNumber);
                             HIGH = ((finalNumber >> 32) & (0b11111111111111111111111111111111));
                             LOW = ((finalNumber) & (0b11111111111111111111111111111111));
                                                   break;
@@ -509,15 +511,11 @@ int main(int argc, char * argv[]) {
                         
                     //Move From High
                     case FUNC_MFHI:
-                    printf("%d\n",HIGH);
                         RegFile[RD] = HIGH;
                         break;
                         
                     //Move From Low
                     case FUNC_MFLO:
-                   printf("lastCommand\n" );
-                   printf("%d\n",LOW );
-                   printf("%d\n",RD );
                         RegFile[RD] = LOW;
                         break;
                         
