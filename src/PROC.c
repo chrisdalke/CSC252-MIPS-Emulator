@@ -390,6 +390,8 @@ int main(int argc, char * argv[]) {
                 
                 //Loads the most-significant part of a word as a signed value from an unaligned memory address
                 //TODO
+
+                RegFile[RT] = RegFile[RT] | readWord(OFFSET+BASE,false)  //rt ← rt MERGE memory[base+offset]
                 
                 break;
                 
@@ -399,6 +401,8 @@ int main(int argc, char * argv[]) {
                 //Loads the least-significant part of a word as a signed value from an unaligned memory address
                 //TODO
                 
+            RegFile[RT] = RegFile[RT] | readWord(OFFSET+BASE,false) //rt ← rt MERGE memory[base+offset]
+
                 break;
                 
             //Store Byte
