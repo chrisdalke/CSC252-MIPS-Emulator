@@ -228,8 +228,10 @@ int main(int argc, char * argv[]) {
                 
             //Bit XOR Immediate
             case OP_XORI:
+            {
                 RegFile[RT] = (RegFile[RS] ^ immediate);
                 break;
+            }
                 
             //Bit OR Immediate
             case OP_ORI:
@@ -266,22 +268,18 @@ int main(int argc, char * argv[]) {
             // Branch Instructions
             //////////////////////////////////////////////////////////
                 
-            //Branch on Equal
+                //TODO: branches are completely broken
+                //currently logic for branches are executed in the wrong order
+                
+                //Branch on Equal
+                //Branch on Equal Likely
+            case OP_BEQL:
             case OP_BEQ:
             {
                 if (RegFile[RS] == RegFile[RT]){
                     newPC = PC + immediateExtended;
                     branchDelayStatus = 1; //starts branch
                 }
-                
-                break;
-            }
-                
-            //Branch on Equal Likely
-            case OP_BEQL:
-            {
-                //Figure out what this is
-                
                 break;
             }
                 
@@ -295,7 +293,9 @@ int main(int argc, char * argv[]) {
                 break;
             }
                 
-            //Branch on Less Than Zero
+                //Branch on Less Than Zero
+                //Branch on Less than Zero Likely
+            case OP_BLEZL:
             case OP_BLEZ:
             {
                 
@@ -307,28 +307,15 @@ int main(int argc, char * argv[]) {
                 break;
             }
                 
-            //Branch on Less than Zero Likely
-            case OP_BLEZL:
-            {
-                //Figure out what this is
-                break;
-            }
-                
-            //Branch on Not Equal
+                //Branch on Not Equal
+                //Branch on Not Equal Likely
+            case OP_BNEL:
             case  OP_BNE:
             {
                 if (RegFile[RS] != RegFile[RT]){
                     newPC = PC + immediateExtended;
                     branchDelayStatus = 1; //starts branch
                 }
-                break;
-            }
-                
-            //Branch on Not Equal Likely
-            case OP_BNEL:
-            {
-                //Figure out what this is
-                
                 break;
             }
                 
@@ -559,50 +546,68 @@ int main(int argc, char * argv[]) {
                         
                     //NOR
                     case FUNC_NOR:
+                    {
                         RegFile[RD] = ~(RegFile[RS]| RegFile[RT]);
                         break;
-                    
+                    }
+                        
                     //OR
                     case FUNC_OR:
+                    {
                         RegFile[RD] = RegFile[RS] | RegFile[RT];
                         break;
+                    }
                         
                     //SLL (Shift Left Logical)
                     case FUNC_SLL:
-                        RegFile[RD] = RegFile[RT] << RegFile[shamt];
+                    {
+                        RegFile[RD] = RegFile[RT] << shamt;
                         break;
+                    }
                         
                     //SLLV (Shift Left Logical Variable)
                     case FUNC_SLLV:
+                    {
                         RegFile[RD] = RegFile[RT] << RegFile[RS];
                         break;
+                    }
                         
                     //Set On Less Than Unsigned
                     case FUNC_SLTU:
+                    {
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
+                    }
                         
                     //Shift Word Right Arithmetic
                     case FUNC_SRA:
+                    {
                         //Shifts right but arithmetically so copy sign bit
                         RegFile[RD] = RegFile[RT] >> shamt;
                         break;
+                    }
                         
                     //Shift Word Right Arithmetic Variable
                     case FUNC_SRAV:
+                    {
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
+                    }
                         
                     //SRL (Shift Right Logical)
                     case FUNC_SRL:
-                        RegFile[RD] = RegFile[RT] >> RegFile[shamt];
+                    {
+                        RegFile[RD] = RegFile[RT] >> shamt;
                         break;
+                    }
                         
                     //SRLV (Shift Right Logical Variable)
                     case FUNC_SRLV:
+                    {
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
-                    
+                    }
+                        
                     //////////////////////////////////////////////////////////
                     // Jump Instructions (R-Type)
                     //////////////////////////////////////////////////////////
@@ -628,7 +633,7 @@ int main(int argc, char * argv[]) {
                 break;
                 
             case OP_REGIMM:
-                
+            {
                 //////////////////////////////////////////////////////////
                 // Compare to Zero Branch Instructions
                 //////////////////////////////////////////////////////////
@@ -639,49 +644,26 @@ int main(int argc, char * argv[]) {
                 bool doLink = false;
                 
                 switch (zeroComparisonType){
-                        //Branch Greater Than or Equal to Zero
-                    case 0b1:
-                        if (RegFile[RS] >= 0){
-                            doBranch = true;
-                        }
-                        break;
-                    case 0b10001:
-                        //Branch Greater Than or Equal to Zero And Link
-                        if (RegFile[RS] >= 0){
-                            doBranch = true;
-                            doLink = true;
-                        }
-                        break;
-                    case 0b0:
-                        //Branch Less Than Zero
-                        if (RegFile[RS] < 0){
-                            doBranch = true;
-                        }
-                        break;
-                    case 0b10000:
-                        //Branch Less Than Zero And Link
-                        if (RegFile[RS] < 0){
-                            doBranch = true;
-                            doLink = true;
-                        }
-                        break;
-                    case 0b0;
-                        RegFile[RS] << 0;
-                    default:
-                        printf("ERROR: IMPROPER ZERO COMPARISON TYPE");
-                        break;
+                    //Branch Greater Than or Equal to Zero
+                    case 0b00010000: if (RegFile[RS] >= 0){ doBranch = true; } break;
+                    //Branch Greater Than or Equal to Zero And Link
+                    case 0b00010001: if (RegFile[RS] >= 0){ doBranch = true; doLink = true; } break;
+                    //Branch Less Than Zero
+                    case 0b00000000: if (RegFile[RS] < 0) { doBranch = true; } break;
+                    //Branch Less Than Zero And Link
+                    case 0b00010000: if (RegFile[RS] < 0) { doBranch = true; doLink = true; } break;
+                    default: printf("ERROR: IMPROPER ZERO COMPARISON TYPE"); break;
                 }
                 
                 if (doBranch){
-                    
                     newPC = PC + immediateExtended; //update branch target
                     branchDelayStatus = 1; //starts branch
-                    
                     if (doLink){
                         RegFile[RD] = PC + 8;
                     }
                 }
                 break;
+            }
                 
             default:
                 printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
