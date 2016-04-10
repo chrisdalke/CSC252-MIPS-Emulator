@@ -104,15 +104,13 @@ void write_initialization_vector(uint32_t sp, uint32_t gp, uint32_t start) {
     
 }
 
-//This is used for addi methohds -> taken from stackoverflow
-//(http://stackoverflow.com/questions/6215256/sign-extension-from-16-to-32-bits-in-c)
-int signExtension(int entry) {
-    int finalSE = (0x0000FFFF & entry);
-    int mask = 0x00008000;
-    if (mask & entry) {
-        finalSE = finalSE + 0xFFFF0000;
+//This is used for addi methohds
+int signExtension(int input) {
+    int output = (0x0000FFFF & input);
+    if (0x00008000 & input) {
+        output = output + 0xFFFF0000;
     }
-    return finalSE;
+    return output;
 }
 
 int main(int argc, char * argv[]) {
