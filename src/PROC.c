@@ -164,7 +164,7 @@ int main(int argc, char * argv[]) {
         
         //Determine what the OPCode for the current instruction is
         //shift the current instruction 26 to the right to get the first 6 bits (OPCODE)
-        unsigned char opcode = ((CurrentInstruction) >> 26) & (0b00111111);
+        uint32_t opcode = ((CurrentInstruction) >> 26) & (0b00111111);
         
         // ----------------------------------------------------
         //Preload any variables that we might potentially need
@@ -178,11 +178,24 @@ int main(int argc, char * argv[]) {
         uint32_t SPECIAL = ((CurrentInstruction)) & (0b00111111);
         uint32_t immediate = ((CurrentInstruction)) & (0b1111111111111111);
         uint32_t immediateExtended = signExtension(immediate);
+        
+        uint32_t instrIndex = ((PC + 4) & 0xF0000000) | ((CurrentInstruction & 0b00000111111111111111111111111111) << 2);
+        
+        uint32_t branchTarget = immediateExtended << 2;
+        
+        //Also store immediate as a signed integer
+        int immediateSigned = signExtension(((CurrentInstruction)) & (0b1111111111111111));
 
         //Double-size word variables
         int64_t finalNumber, lowNumber, highNumber;
         // ----------------------------------------------------
+<<<<<<< HEAD
 
+=======
+        
+        printf("Program Counter: %d\n",PC );
+        printf("Opcode: %d\n",opcode );
+>>>>>>> origin/master
         switch(opcode) {
                 
             //////////////////////////////////////////////////////////
@@ -192,17 +205,29 @@ int main(int argc, char * argv[]) {
             //Add Immediate (Signed)
             case OP_ADDI:
             {
+<<<<<<< HEAD
                
                 RegFile[RT] = RegFile[RS] + immediate;
                 printf("%i + %i = %i:\n",RegFile[RS],immediate,RegFile[RT]);
+=======
+                printf("addi\n");
+                //Convert into t
+                RegFile[RT] = RegFile[RS] + immediateSigned;
+                printf("%i + %i = %i:\n",RegFile[RS],immediateSigned,RegFile[RT]);
+>>>>>>> origin/master
                 break;
             }
                 
             //Add Immediate (Unsigned)
             case OP_ADDIU:
             {
+<<<<<<< HEAD
               
                 uint32_t temp = RegFile[RS] + signExtension(immediate);
+=======
+                printf("addiu\n");
+                uint32_t temp = RegFile[RS] + immediateExtended;
+>>>>>>> origin/master
                 RegFile[RT] = temp;
                 break;
             }
@@ -210,8 +235,13 @@ int main(int argc, char * argv[]) {
             //Bit AND Immediate
             case OP_ANDI:
             {
+<<<<<<< HEAD
              
                 RegFile[RT] = RegFile[RS] + signExtension(immediate);
+=======
+                printf("andi\n");
+                RegFile[RT] = RegFile[RS] + immediateExtended;
+>>>>>>> origin/master
                 break;
             }
                 
@@ -234,8 +264,13 @@ int main(int argc, char * argv[]) {
             //Set on Less Than Immediate
             case OP_SLTI:
             {
+<<<<<<< HEAD
                 
                 if (RegFile[RS] < signExtension(immediate)) {
+=======
+                printf("slti\n");
+                if (RegFile[RS] < immediateExtended) {
+>>>>>>> origin/master
                     RegFile[RS] = 1;
                 } else {
                     RegFile[RS] = 0;
@@ -269,7 +304,7 @@ int main(int argc, char * argv[]) {
             {
               
                 if (RegFile[RS] == RegFile[RT]){
-                    newPC = PC + immediateExtended;
+                    newPC = PC + branchTarget;
                     branchDelayStatus = 1; //starts branch
                 }
                 break;
@@ -280,7 +315,7 @@ int main(int argc, char * argv[]) {
             {
               
                 if (RegFile[RS] > 0){
-                    newPC = PC + immediateExtended;
+                    newPC = PC + branchTarget;
                     branchDelayStatus = 1; //starts branch
                 }
                 break;
@@ -292,7 +327,7 @@ int main(int argc, char * argv[]) {
               
                 
                 if (RegFile[RS] <= 0){
-                    newPC = PC + immediateExtended;
+                    newPC = PC + branchTarget;
                     branchDelayStatus = 1; //starts branch
                 }
                 
@@ -304,7 +339,7 @@ int main(int argc, char * argv[]) {
             {
                 
                 if (RegFile[RS] != RegFile[RT]){
-                    newPC = PC + immediateExtended;
+                    newPC = PC + branchTarget;
                     branchDelayStatus = 1; //starts branch
                 }
                 break;
@@ -313,8 +348,13 @@ int main(int argc, char * argv[]) {
             //Unconditional Jump
             case  OP_J:
             {
+<<<<<<< HEAD
               
                 newPC = PC + immediateExtended; //update branch target
+=======
+                printf("j\n");
+                newPC = instrIndex; //update branch target
+>>>>>>> origin/master
                 branchDelayStatus = 1; //starts branch
                 
                 break;
@@ -323,8 +363,13 @@ int main(int argc, char * argv[]) {
             //Jump And Link
             case  OP_JAL:
             {
+<<<<<<< HEAD
                 
                 newPC = PC + immediateExtended; //update branch target
+=======
+                printf("jal\n");
+                newPC = instrIndex; //update branch target
+>>>>>>> origin/master
                 branchDelayStatus = 1; //starts branch
                 
                 //record the return address into RegFile[31]
@@ -373,10 +418,21 @@ int main(int argc, char * argv[]) {
                 break;
                 
             //Load Word
+<<<<<<< HEAD
             case OP_LW: {
                 uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
                 int8_t vData = readWord(vAddr,false);
                 RegFile[RT] = vData;
+=======
+            case OP_LW:
+                printf("lw\n");
+                
+                //load the word given by the address into the specified register
+                printf("rs: %d\n",RegFile[RS]);
+                printf("offset: %d\n",immediateSigned);
+                RegFile[RT] = readWord(RegFile[RS] + immediateSigned,false);
+                printf("loaded word: %d\n",RegFile[RT]);
+>>>>>>> origin/master
 
                 
                 break;
@@ -633,8 +689,13 @@ int main(int argc, char * argv[]) {
                         
                     //Jump and Link Register
                     case FUNC_JALR:
+<<<<<<< HEAD
                       
                         newPC = PC + RegFile[RS]; //update branch target
+=======
+                        printf("jalr\n");
+                        newPC = RegFile[RS]; //update branch target
+>>>>>>> origin/master
                         branchDelayStatus = 1; //starts branch
                         //Update return address
                         RegFile[RD] = PC + 8;
@@ -644,8 +705,13 @@ int main(int argc, char * argv[]) {
                     case FUNC_JR:
                         
                     
+<<<<<<< HEAD
                         newPC = PC + RegFile[RS]; //update branch target
                      
+=======
+                        newPC = RegFile[RS]; //update branch target
+                        printf("jumping offset is %d\n",newPC - PC);
+>>>>>>> origin/master
                         branchDelayStatus = 1; //starts branch
                         break;
                         
@@ -677,6 +743,7 @@ int main(int argc, char * argv[]) {
              
                 
                 switch (zeroComparisonType){
+<<<<<<< HEAD
                     //Branch Greater Than or Equal to Zero
                     case 0b00000001: if (RegFile[RS] >= 0){ doBranch = true; } break;
                     //Branch Greater Than or Equal to Zero And Link
@@ -686,10 +753,21 @@ int main(int argc, char * argv[]) {
                     //Branch Less Than Zero And Link
                     case 0b00010000: if (RegFile[RS] < 0) { doBranch = true; doLink = true; } break;
                     default: break;
+=======
+                    //Branch Greater Than or Equal to Zero (BGEZ)
+                    case 0b00000001: printf("BGEZ\n"); if (RegFile[RS] >= 0){ doBranch = true; } break;
+                    //Branch Greater Than or Equal to Zero And Link (BGEZAL)
+                    case 0b00010001: printf("BGEZAL\n"); if (RegFile[RS] >= 0){ doBranch = true; doLink = true; } break;
+                    //Branch Less Than Zero (BLTZ)
+                    case 0b00000000: printf("BLTZ\n"); if (RegFile[RS] < 0) { doBranch = true; } break;
+                    //Branch Less Than Zero And Link (BLTZAL)
+                    case 0b00010000: printf("BLTZAL\n"); if (RegFile[RS] < 0) { doBranch = true; doLink = true; } break;
+                    default: printf("ERROR: IMPROPER ZERO COMPARISON TYPE"); break;
+>>>>>>> origin/master
                 }
                 
                 if (doBranch){
-                    newPC = PC + immediateExtended; //update branch target
+                    newPC = PC + branchTarget; //update branch target
                     branchDelayStatus = 1; //starts branch
                     if (doLink){
                         RegFile[RD] = PC + 8;
@@ -710,13 +788,20 @@ int main(int argc, char * argv[]) {
         //Handle branch delay slot if there is a branch command executing
         if (branchDelayStatus == 1){
             branchDelayStatus = 2;
+            printf("Starting jump...\n");
         } else if (branchDelayStatus == 2){
+            printf("Finishing jump...\n");
+            printf("old PC = %d\n",PC);
+            printf("new PC = %d\n",newPC);
             PC = newPC;
             branchDelayStatus = 0;
         }
         
         //Hardcode the zero register to always be zero
         RegFile[0] = 0;
+        
+        
+        printRegFile();
         
         //////////////////////////////////////////////////////////
         // End of Main Instruction Simulation
