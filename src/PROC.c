@@ -178,7 +178,7 @@ int main(int argc, char * argv[]) {
         
         //Determine what the OPCode for the current instruction is
         //shift the current instruction 26 to the right to get the first 6 bits (OPCODE)
-        unsigned char opcode = ((CurrentInstruction) >> 26) & (0b00111111);
+        uint32_t opcode = ((CurrentInstruction) >> 26) & (0b00111111);
         
         // ----------------------------------------------------
         //Preload any variables that we might potentially need
@@ -709,18 +709,18 @@ int main(int argc, char * argv[]) {
                 
                 switch (zeroComparisonType){
                     //Branch Greater Than or Equal to Zero (BGEZ)
-                    case 0b00000001: if (RegFile[RS] >= 0){ doBranch = true; } break;
+                    case 0b00000001: printf("BGEZ\n"); if (RegFile[RS] >= 0){ doBranch = true; } break;
                     //Branch Greater Than or Equal to Zero And Link (BGEZAL)
-                    case 0b00010001: if (RegFile[RS] >= 0){ doBranch = true; doLink = true; } break;
+                    case 0b00010001: printf("BGEZAL\n"); if (RegFile[RS] >= 0){ doBranch = true; doLink = true; } break;
                     //Branch Less Than Zero (BLTZ)
-                    case 0b00000000: if (RegFile[RS] < 0) { doBranch = true; } break;
+                    case 0b00000000: printf("BLTZ\n"); if (RegFile[RS] < 0) { doBranch = true; } break;
                     //Branch Less Than Zero And Link (BLTZAL)
-                    case 0b00010000: if (RegFile[RS] < 0) { doBranch = true; doLink = true; } break;
+                    case 0b00010000: printf("BLTZAL\n"); if (RegFile[RS] < 0) { doBranch = true; doLink = true; } break;
                     default: printf("ERROR: IMPROPER ZERO COMPARISON TYPE"); break;
                 }
                 
                 if (doBranch){
-                    newPC = PC + immediateExtended; //update branch target
+                    newPC = PC + branchTarget; //update branch target
                     branchDelayStatus = 1; //starts branch
                     if (doLink){
                         RegFile[RD] = PC + 8;
