@@ -1,65 +1,23 @@
-.set noat
+#.set noat
 .text
 .global __start
 .global main
+.global sub1
 __start:
 main:
-li $0, 0xdead
+jal sub1
+la $2, sub2
+jalr $2
 nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-li $1, 0x5678abcd
-li $2, 0x1234fedc
-add $0, $1, $2
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-li $1, 0xcafebabe
-mtlo $1
-mflo $0
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-nop
-li $1, 0xdeadbeef
-mthi $1
-mfhi $0
+j end
+
+sub1:
+addi $4, $0, 4
+jr $ra
+
+sub2:
+addi $8, $0, 8
+jr $ra
+
+end: li $v0, 4001
 

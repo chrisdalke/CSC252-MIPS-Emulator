@@ -41,7 +41,7 @@
 #define  OP_BLEZ    0b00000110
 #define  OP_BNE     0b00000101
 #define  OP_J       0b00000010
-#define  OP_JAL     0b00000011
+#define  OP_JAL     0b00000011 
 #define  OP_LB      0b00100000
 #define  OP_LBU     0b00100100
 #define  OP_LH      0b00100001
@@ -104,29 +104,15 @@ void write_initialization_vector(uint32_t sp, uint32_t gp, uint32_t start) {
     
 }
 
-//THIS IS USED for some of the addi methods -> taken from github
-int signExtension(int instr) {
-    int value = (0x0000FFFF & instr);
+//This is used for addi methohds -> taken from stackoverflow
+//(http://stackoverflow.com/questions/6215256/sign-extension-from-16-to-32-bits-in-c)
+int signExtension(int entry) {
+    int finalSE = (0x0000FFFF & entry);
     int mask = 0x00008000;
-    if (mask & instr) {
-        value += 0xFFFF0000;
+    if (mask & entry) {
+        finalSE = finalSE + 0xFFFF0000;
     }
-    return value;
-}
-//Function that converts a byte to binary
-//REMOVE BEFORE SUBMITTING
-const char *byte_to_binary(int x)
-{
-    static char b[9];
-    b[0] = 0;
-    
-    int z;
-    for (z = 128; z > 0; z >>= 1)
-    {
-        strcat(b, ((x & z) == z) ? "1" : "0");
-    }
-    
-    return b;
+    return finalSE;
 }
 
 int main(int argc, char * argv[]) {
@@ -196,8 +182,7 @@ int main(int argc, char * argv[]) {
         //Double-size word variables
         int64_t finalNumber, lowNumber, highNumber;
         // ----------------------------------------------------
-        
-        printf("%d\n",opcode );
+
         switch(opcode) {
                 
             //////////////////////////////////////////////////////////
@@ -207,7 +192,7 @@ int main(int argc, char * argv[]) {
             //Add Immediate (Signed)
             case OP_ADDI:
             {
-                printf("addi\n");
+               
                 RegFile[RT] = RegFile[RS] + immediate;
                 printf("%i + %i = %i:\n",RegFile[RS],immediate,RegFile[RT]);
                 break;
@@ -216,7 +201,7 @@ int main(int argc, char * argv[]) {
             //Add Immediate (Unsigned)
             case OP_ADDIU:
             {
-                printf("addiu\n");
+              
                 uint32_t temp = RegFile[RS] + signExtension(immediate);
                 RegFile[RT] = temp;
                 break;
@@ -225,7 +210,7 @@ int main(int argc, char * argv[]) {
             //Bit AND Immediate
             case OP_ANDI:
             {
-                printf("andi\n");
+             
                 RegFile[RT] = RegFile[RS] + signExtension(immediate);
                 break;
             }
@@ -233,7 +218,7 @@ int main(int argc, char * argv[]) {
             //Bit XOR Immediate
             case OP_XORI:
             {
-                printf("xori\n");
+               
                 RegFile[RT] = (RegFile[RS] ^ immediate);
                 break;
             }
@@ -241,7 +226,7 @@ int main(int argc, char * argv[]) {
             //Bit OR Immediate
             case OP_ORI:
             {
-                printf("ori\n");
+                
                 RegFile[RT] = (RegFile[RS] | immediate);
                 break;
             }
@@ -249,7 +234,7 @@ int main(int argc, char * argv[]) {
             //Set on Less Than Immediate
             case OP_SLTI:
             {
-                printf("slti\n");
+                
                 if (RegFile[RS] < signExtension(immediate)) {
                     RegFile[RS] = 1;
                 } else {
@@ -261,7 +246,7 @@ int main(int argc, char * argv[]) {
             //Set on Less Than Immediate Unsigned
             case OP_SLTIU:
             {
-                printf("sltiu\n");
+             
                 //This implementation taken from the mips handbook
                 //Check to make sure this actually works properly
                 if ((0 || RegFile[RS]) < (0 || signExtension(immediate))) {
@@ -282,7 +267,7 @@ int main(int argc, char * argv[]) {
             //Branch on Equal
             case OP_BEQ:
             {
-                printf("beq\n");
+              
                 if (RegFile[RS] == RegFile[RT]){
                     newPC = PC + immediateExtended;
                     branchDelayStatus = 1; //starts branch
@@ -293,7 +278,7 @@ int main(int argc, char * argv[]) {
             //Branch on Greater Than Zero
             case OP_BGTZ:
             {
-                printf("bgtz\n");
+              
                 if (RegFile[RS] > 0){
                     newPC = PC + immediateExtended;
                     branchDelayStatus = 1; //starts branch
@@ -304,7 +289,7 @@ int main(int argc, char * argv[]) {
             //Branch on Less Than Zero
             case OP_BLEZ:
             {
-                printf("blez\n");
+              
                 
                 if (RegFile[RS] <= 0){
                     newPC = PC + immediateExtended;
@@ -317,7 +302,7 @@ int main(int argc, char * argv[]) {
             //Branch on Not Equal
             case  OP_BNE:
             {
-                printf("bne\n");
+                
                 if (RegFile[RS] != RegFile[RT]){
                     newPC = PC + immediateExtended;
                     branchDelayStatus = 1; //starts branch
@@ -328,7 +313,7 @@ int main(int argc, char * argv[]) {
             //Unconditional Jump
             case  OP_J:
             {
-                printf("j\n");
+              
                 newPC = PC + immediateExtended; //update branch target
                 branchDelayStatus = 1; //starts branch
                 
@@ -338,7 +323,7 @@ int main(int argc, char * argv[]) {
             //Jump And Link
             case  OP_JAL:
             {
-                printf("jal\n");
+                
                 newPC = PC + immediateExtended; //update branch target
                 branchDelayStatus = 1; //starts branch
                 
@@ -355,7 +340,7 @@ int main(int argc, char * argv[]) {
             //Load Byte
             case OP_LB:
             {
-                printf("lb\n");
+                
                 //This needs to take the sign bit and shift it over!!
                 uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
                 int8_t vData = readByte(vAddr,false);
@@ -365,7 +350,7 @@ int main(int argc, char * argv[]) {
                 
             //Load Byte Unsigned
             case OP_LBU: {
-                printf("lbu\n");
+                
                 uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
                 uint8_t vData = readByte(vAddr,false);
                 RegFile[RT] = vData;
@@ -374,33 +359,31 @@ int main(int argc, char * argv[]) {
             //Load Half-Word
             case OP_LH:
                 
-                printf("lh\n");
+                
                 RegFile[RT] = (readWord(OFFSET+BASE,false) & 0b11111111111111);
                 break;
                 
             //Load Half-Word Unsigned
             case OP_LHU:
-                printf("lhu\n");
                 break;
                 
             //Load Upper Immediate
             case OP_LUI:
-                printf("lui\n");
                 RegFile[RT] = (immediate <<16); //move immediate 16 bits
                 break;
                 
             //Load Word
-            case OP_LW:
-                printf("lw\n");
-                
-                //load the word given by the address into the specified register
-                RegFile[RT] = readWord(RS + immediate,false);
+            case OP_LW: {
+                uint32_t vAddr = immediateExtended + signExtension(RegFile[RS]);
+                int8_t vData = readWord(vAddr,false);
+                RegFile[RT] = vData;
+
                 
                 break;
-                
+                }
             //Load Word Left
             case OP_LWL:
-                printf("lwl\n");
+          
                 
                 //Loads the most-significant part of a word as a signed value from an unaligned memory address
                 //TODO
@@ -411,7 +394,7 @@ int main(int argc, char * argv[]) {
                 
             //Load Word Right
             case OP_LWR:
-                printf("lwr\n");
+                
                 
                 //Loads the least-significant part of a word as a signed value from an unaligned memory address
                 //TODO
@@ -422,7 +405,7 @@ int main(int argc, char * argv[]) {
                 
             //Store Byte
             case OP_SB:
-                printf("sb\n");
+                
 
            writeByte(OFFSET+BASE,RegFile[RT], false);//memory[base+offset] ← rt
           
@@ -430,13 +413,13 @@ int main(int argc, char * argv[]) {
                 
             //Store Half-Word
             case OP_SH:
-            printf("sh\n");
+            
              writeWord(OFFSET+BASE, (RegFile[RT] & 0b1111111111111111), false) ;//memory[base+offset] ← rt
-                break;                  //not sure when u take the half word, before or after
-                //DONT GET WHAT IS DIFFERENT WITH THE BOTTOM THREE?? MIPS HANd GUIDE IS LIKE THE SAME
+                break;                  
+               
             //Store Word
             case OP_SW:
-                printf("sw\n");
+               
              
                 //Stores a word into the specified memory location
                  writeWord(OFFSET+BASE, RegFile[RT], false);
@@ -445,13 +428,12 @@ int main(int argc, char * argv[]) {
                 
             //Store Word Left
             case OP_SWL:
-                printf("swl\n");
+            
             writeWord(OFFSET+BASE, RegFile[RT], false);//memory[base+offset] ← rt
                 break;
                 
             //Store Word Right
             case OP_SWR:
-                printf("swr\n");
                 writeWord(OFFSET+BASE, RegFile[RT], false); // memory[base+offset] ← rt
                 break;
                 
@@ -467,87 +449,87 @@ int main(int argc, char * argv[]) {
                     //////////////////////////////////////////////////////////
                         
                     case FUNC_ADD:
-                        printf("add\n");
+                    
                         RegFile[RD] = RegFile[RS] + RegFile[RT];
                         break;
                         
                     case FUNC_ADDU:
-                        printf("addu\n");
+                       
                         RegFile[RD] = RegFile[RS] + RegFile[RT];
                         break;
                         
                     case  FUNC_SUB:
-                        printf("sub\n");
+                       
                         RegFile[RD] = RegFile[RS] - RegFile[RT];
                         break;
                         
                     case  FUNC_SUBU:
-                        printf("subu\n");
+                    
                         RegFile[RD] = RegFile[RS] - RegFile[RT];
                         break;
                         
                     case FUNC_DIV: //if you div by 0, answer is UNPREDICTABLE!
-                        printf("div\n");
-                        lowNumber = RegFile[RS] / RegFile[RT]; // here
+                        
+                        lowNumber = RegFile[RS] / RegFile[RT]; 
                         LOW = lowNumber;
 
-                        highNumber = RegFile[RS] % RegFile[RT]; //here
+                        highNumber = RegFile[RS] % RegFile[RT]; 
                         HIGH = highNumber;
                         break;
                         
                     case FUNC_DIVU:
-                        printf("divu\n");
-                         lowNumber = RegFile[RS] / RegFile[RT]; //here
+                      
+                         lowNumber = RegFile[RS] / RegFile[RT]; 
                         LOW = lowNumber;
 
-                        highNumber = RegFile[RS] % RegFile[RT]; //here
+                        highNumber = RegFile[RS] % RegFile[RT]; 
                         HIGH = highNumber;
                         break;
                         
                     case FUNC_MULT: //not sure if I did this correctly
-                        printf("mult\n");
+                        
                             //high = 0-31, of 64 bit number, 32-64 is low, see ->
-                            finalNumber = RegFile[RS] * RegFile[RT]; //here
+                            finalNumber = RegFile[RS] * RegFile[RT]; 
                             HIGH = ((finalNumber >> 32) & (0b11111111111111111111111111111111));
                             LOW = ((finalNumber) & (0b11111111111111111111111111111111));
                                                   break;
                         
                     case FUNC_MULTU: // same as above
-                        printf("multu\n");
+                       
                       //high = 0-31, of 64 bit number, 32-64 is low, see ->
-                           finalNumber = (RegFile[RS] * RegFile[RT]); //here
+                           finalNumber = (RegFile[RS] * RegFile[RT]); 
                             HIGH = ((finalNumber >> 32) & (0b00111111));
                             LOW = ((finalNumber << 32) & (0b00111111));
                         break;
                         
                     //Move From High
                     case FUNC_MFHI:
-                        printf("mfhi\n");
+                    
                         RegFile[RD] = HIGH;
                         break;
                         
                     //Move From Low
                     case FUNC_MFLO:
-                        printf("mflo\n");
+                        
                         RegFile[RD] = LOW;
                         break;
                         
                     //Set on Less Than
                     case  FUNC_SLT:
-                        printf("slt\n");
+                     
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
                         
                     //Move To High
                     case FUNC_MTHI:
-                        printf("mthi\n"); // a div, mult, or something with high low must be used
-                                     // before this command
+                       
+                                     
                         HIGH = RegFile[RS];
                         break;
                         
                     //Move To Low
                     case FUNC_MTLO:
-                        printf("mtlo\n");
+                      
                         LOW = RegFile[RS];
                         break;
                         
@@ -559,7 +541,7 @@ int main(int argc, char * argv[]) {
                     //AND
                     case FUNC_AND:
                     {
-                        printf("and\n");
+                   
                         RegFile[RD] = RegFile[RS] & RegFile[RT];
                         break;
                     }
@@ -567,7 +549,7 @@ int main(int argc, char * argv[]) {
                     //XOR
                     case FUNC_XOR:
                     {
-                        printf("xor\n");
+                        
                         RegFile[RD] = RegFile[RS] ^ RegFile[RT];
                         break;
                     }
@@ -575,7 +557,7 @@ int main(int argc, char * argv[]) {
                     //NOR
                     case FUNC_NOR:
                     {
-                        printf("nor\n");
+                       
                         RegFile[RD] = ~(RegFile[RS]| RegFile[RT]);
                         break;
                     }
@@ -583,7 +565,7 @@ int main(int argc, char * argv[]) {
                     //OR
                     case FUNC_OR:
                     {
-                        printf("or\n");
+                    
                         RegFile[RD] = RegFile[RS] | RegFile[RT];
                         break;
                     }
@@ -591,7 +573,7 @@ int main(int argc, char * argv[]) {
                     //SLL (Shift Left Logical)
                     case FUNC_SLL:
                     {
-                        printf("sll / nop\n");
+                        
                         RegFile[RD] = RegFile[RT] << shamt;
                         break;
                     }
@@ -599,7 +581,7 @@ int main(int argc, char * argv[]) {
                     //SLLV (Shift Left Logical Variable)
                     case FUNC_SLLV:
                     {
-                        printf("sllv\n");
+                     
                         RegFile[RD] = RegFile[RT] << RegFile[RS];
                         break;
                     }
@@ -607,7 +589,7 @@ int main(int argc, char * argv[]) {
                     //Set On Less Than Unsigned
                     case FUNC_SLTU:
                     {
-                        printf("sltu\n");
+                    
                         RegFile[RD] = (RegFile[RS] < RegFile[RT]);
                         break;
                     }
@@ -615,7 +597,7 @@ int main(int argc, char * argv[]) {
                     //Shift Word Right Arithmetic
                     case FUNC_SRA:
                     {
-                        printf("sra\n");
+                    
                         //Shifts right but arithmetically so copy sign bit
                         RegFile[RD] = RegFile[RT] >> shamt;
                         break;
@@ -624,7 +606,7 @@ int main(int argc, char * argv[]) {
                     //Shift Word Right Arithmetic Variable
                     case FUNC_SRAV:
                     {
-                        printf("srav\n");
+                      
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
                     }
@@ -632,7 +614,7 @@ int main(int argc, char * argv[]) {
                     //SRL (Shift Right Logical)
                     case FUNC_SRL:
                     {
-                        printf("srl\n");
+                 
                         RegFile[RD] = RegFile[RT] >> shamt;
                         break;
                     }
@@ -640,7 +622,7 @@ int main(int argc, char * argv[]) {
                     //SRLV (Shift Right Logical Variable)
                     case FUNC_SRLV:
                     {
-                        printf("srlv\n");
+                 
                         RegFile[RD] = RegFile[RT] >> RegFile[RS];
                         break;
                     }
@@ -651,7 +633,7 @@ int main(int argc, char * argv[]) {
                         
                     //Jump and Link Register
                     case FUNC_JALR:
-                        printf("jalr\n");
+                      
                         newPC = PC + RegFile[RS]; //update branch target
                         branchDelayStatus = 1; //starts branch
                         //Update return address
@@ -660,23 +642,23 @@ int main(int argc, char * argv[]) {
                         
                     //Jump Register
                     case FUNC_JR:
-                        printf("jr\n");
+                        
                     
                         newPC = PC + RegFile[RS]; //update branch target
-                        printf("jumping offset is %d\n",newPC - PC);
+                     
                         branchDelayStatus = 1; //starts branch
                         break;
                         
                     //Syscall
                     case FUNC_SYSCALL:
-                        printf("Syscall\n");
+                       
                         //printf("parameter = %i\n",RegFile[2]);
                         //Load the parameter from v0 (register 2)
                         SyscallExe(RegFile[2]);
                         break;
                         
                     default:
-                        printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN SECOND SWITCH\n" );
+                        
                         printf("FUNC = %s\n",byte_to_binary(SPECIAL));
                 }
                 
@@ -692,7 +674,7 @@ int main(int argc, char * argv[]) {
                 zeroComparisonType = RegFile[RT];
                 bool doBranch = false;
                 bool doLink = false;
-                printf("compare to zero branch\n");
+             
                 
                 switch (zeroComparisonType){
                     //Branch Greater Than or Equal to Zero
@@ -703,7 +685,7 @@ int main(int argc, char * argv[]) {
                     case 0b00000000: if (RegFile[RS] < 0) { doBranch = true; } break;
                     //Branch Less Than Zero And Link
                     case 0b00010000: if (RegFile[RS] < 0) { doBranch = true; doLink = true; } break;
-                    default: printf("ERROR: IMPROPER ZERO COMPARISON TYPE"); break;
+                    default: break;
                 }
                 
                 if (doBranch){
@@ -717,7 +699,7 @@ int main(int argc, char * argv[]) {
             }
                 
             default:
-                printf("ERROR: THE DEFAULT CASE WAS EXECUTED IN FIRST SWTICH\n" );
+              
                 printf("OPCODE = %s\n",byte_to_binary(opcode));
                 break;
         }
@@ -742,7 +724,7 @@ int main(int argc, char * argv[]) {
       
     } //end fori
     
-    printRegFile();
+
     
     //Close file pointers & free allocated Memory
     closeFDT();
