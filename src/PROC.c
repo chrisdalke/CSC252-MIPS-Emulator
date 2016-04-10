@@ -193,14 +193,19 @@ int main(int argc, char * argv[]) {
         uint32_t immediate = ((CurrentInstruction)) & (0b1111111111111111);
         uint32_t immediateExtended = signExtension(immediate);
         
+        uint32_t instrIndex = ((PC + 4) & 0xF0000000) | ((CurrentInstruction & 0b00000111111111111111111111111111) << 2);
+        
+        uint32_t branchTarget = immediateExtended << 2;
+        
         //Also store immediate as a signed integer
-        int immediateSigned = ((CurrentInstruction)) & (0b1111111111111111);
+        int immediateSigned = signExtension(((CurrentInstruction)) & (0b1111111111111111));
 
         //Double-size word variables
         int64_t finalNumber, lowNumber, highNumber;
         // ----------------------------------------------------
         
-        printf("%d\n",opcode );
+        printf("Program Counter: %d\n",PC );
+        printf("Opcode: %d\n",opcode );
         switch(opcode) {
                 
             //////////////////////////////////////////////////////////
@@ -288,7 +293,7 @@ int main(int argc, char * argv[]) {
             {
                 printf("beq\n");
                 if (RegFile[RS] == RegFile[RT]){
-                    newPC = PC + immediateExtended;
+                    newPC = PC + branchTarget;
                     branchDelayStatus = 1; //starts branch
                 }
                 break;
@@ -299,7 +304,7 @@ int main(int argc, char * argv[]) {
             {
                 printf("bgtz\n");
                 if (RegFile[RS] > 0){
-                    newPC = PC + immediateExtended;
+                    newPC = PC + branchTarget;
                     branchDelayStatus = 1; //starts branch
                 }
                 break;
@@ -311,7 +316,7 @@ int main(int argc, char * argv[]) {
                 printf("blez\n");
                 
                 if (RegFile[RS] <= 0){
-                    newPC = PC + immediateExtended;
+                    newPC = PC + branchTarget;
                     branchDelayStatus = 1; //starts branch
                 }
                 
@@ -323,7 +328,7 @@ int main(int argc, char * argv[]) {
             {
                 printf("bne\n");
                 if (RegFile[RS] != RegFile[RT]){
-                    newPC = PC + immediateExtended;
+                    newPC = PC + branchTarget;
                     branchDelayStatus = 1; //starts branch
                 }
                 break;
@@ -333,7 +338,7 @@ int main(int argc, char * argv[]) {
             case  OP_J:
             {
                 printf("j\n");
-                newPC = PC + immediateExtended; //update branch target
+                newPC = instrIndex; //update branch target
                 branchDelayStatus = 1; //starts branch
                 
                 break;
@@ -343,7 +348,7 @@ int main(int argc, char * argv[]) {
             case  OP_JAL:
             {
                 printf("jal\n");
-                newPC = PC + immediateExtended; //update branch target
+                newPC = instrIndex; //update branch target
                 branchDelayStatus = 1; //starts branch
                 
                 //record the return address into RegFile[31]
@@ -398,7 +403,11 @@ int main(int argc, char * argv[]) {
                 printf("lw\n");
                 
                 //load the word given by the address into the specified register
-                RegFile[RT] = readWord(RS + immediate,false);
+                printf("rs: %d\n",RegFile[RS]);
+                printf("offset: %d\n",immediateSigned);
+                RegFile[RT] = readWord(RegFile[RS] + immediateSigned,false);
+                printf("loaded word: %d\n",RegFile[RT]);
+
                 
                 break;
                 
@@ -656,7 +665,7 @@ int main(int argc, char * argv[]) {
                     //Jump and Link Register
                     case FUNC_JALR:
                         printf("jalr\n");
-                        newPC = PC + RegFile[RS]; //update branch target
+                        newPC = RegFile[RS]; //update branch target
                         branchDelayStatus = 1; //starts branch
                         //Update return address
                         RegFile[RD] = PC + 8;
@@ -666,7 +675,7 @@ int main(int argc, char * argv[]) {
                     case FUNC_JR:
                         printf("jr\n");
                     
-                        newPC = PC + RegFile[RS]; //update branch target
+                        newPC = RegFile[RS]; //update branch target
                         printf("jumping offset is %d\n",newPC - PC);
                         branchDelayStatus = 1; //starts branch
                         break;
@@ -699,13 +708,13 @@ int main(int argc, char * argv[]) {
                 printf("compare to zero branch\n");
                 
                 switch (zeroComparisonType){
-                    //Branch Greater Than or Equal to Zero
+                    //Branch Greater Than or Equal to Zero (BGEZ)
                     case 0b00000001: if (RegFile[RS] >= 0){ doBranch = true; } break;
-                    //Branch Greater Than or Equal to Zero And Link
+                    //Branch Greater Than or Equal to Zero And Link (BGEZAL)
                     case 0b00010001: if (RegFile[RS] >= 0){ doBranch = true; doLink = true; } break;
-                    //Branch Less Than Zero
+                    //Branch Less Than Zero (BLTZ)
                     case 0b00000000: if (RegFile[RS] < 0) { doBranch = true; } break;
-                    //Branch Less Than Zero And Link
+                    //Branch Less Than Zero And Link (BLTZAL)
                     case 0b00010000: if (RegFile[RS] < 0) { doBranch = true; doLink = true; } break;
                     default: printf("ERROR: IMPROPER ZERO COMPARISON TYPE"); break;
                 }
@@ -732,13 +741,20 @@ int main(int argc, char * argv[]) {
         //Handle branch delay slot if there is a branch command executing
         if (branchDelayStatus == 1){
             branchDelayStatus = 2;
+            printf("Starting jump...\n");
         } else if (branchDelayStatus == 2){
+            printf("Finishing jump...\n");
+            printf("old PC = %d\n",PC);
+            printf("new PC = %d\n",newPC);
             PC = newPC;
             branchDelayStatus = 0;
         }
         
         //Hardcode the zero register to always be zero
         RegFile[0] = 0;
+        
+        
+        printRegFile();
         
         //////////////////////////////////////////////////////////
         // End of Main Instruction Simulation

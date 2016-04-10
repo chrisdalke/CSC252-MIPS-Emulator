@@ -14,7 +14,7 @@ Disassembly of section .text:
 004000d0 <__start>:
   4000d0:	8f998018 	lw	t9,-32744(gp)
   4000d4:	00000000 	nop
-  4000d8:	0411000a 	bal	400104 <sub1>
+  4000d8:	0411000a 	jal	400104 <sub1>
   4000dc:	00000000 	nop
   4000e0:	8f82801c 	lw	v0,-32740(gp)
   4000e4:	00000000 	nop
@@ -23,7 +23,7 @@ Disassembly of section .text:
   4000f0:	0040f809 	jalr	v0
   4000f4:	00000000 	nop
   4000f8:	00000000 	nop
-  4000fc:	10000007 	b	40011c <end>
+  4000fc:	10000007 	j	40011c <end>
   400100:	00000000 	nop
 
 00400104 <sub1>:
